@@ -5,7 +5,6 @@ package nuesoft.repositorysample.Repository;
  */
 
 public enum RepositoryType {
-
     SQL,
     REST,
     REALM

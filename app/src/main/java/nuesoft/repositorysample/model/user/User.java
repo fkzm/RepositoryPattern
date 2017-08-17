@@ -8,34 +8,31 @@ import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 import nuesoft.repositorysample.Repository.RepositoryType;
 import nuesoft.repositorysample.Repository.base.BaseAdapter;
-import nuesoft.repositorysample.Repository.user.UserAdapter;
-import nuesoft.repositorysample.Repository.user.UserRealmAdapter;
-import nuesoft.repositorysample.Repository.user.UserRestAdapter;
-import nuesoft.repositorysample.Repository.user.UserSqlAdapter;
+import nuesoft.repositorysample.Repository.user.RealmAdapter;
+import nuesoft.repositorysample.Repository.user.RestAdapter;
+import nuesoft.repositorysample.Repository.user.SqlAdapter;
 import nuesoft.repositorysample.exception.StoreException;
 import nuesoft.repositorysample.model.base.BaseModel;
-import nuesoft.repositorysample.store.UserStore;
+import nuesoft.repositorysample.store.Store;
 
 /**
  * Created by mysterious on 8/14/17.
  */
 
-public class User extends RealmObject implements BaseModel {
+public class User {
 
-    @PrimaryKey
+    //    @PrimaryKey
     private int _nationalCode;
     private String _name;
     private int _age;
 
-    @Ignore
-    private UserStore _userStore;
 
     public int getNationalCode() {
         return _nationalCode;
     }
 
     public String getName() {
-        return _name;
+        return this._name;
     }
 
     public int getAge() {
@@ -53,60 +50,74 @@ public class User extends RealmObject implements BaseModel {
     public void setAge(int age) {
         this._age = age;
     }
-
-    @Override
-    public void sync(Map<String, BaseAdapter> userAdapterMap) {
-
-    }
-
-    @Override
-    public void migrate(BaseAdapter destinationAdapter) {
-
-        this._userStore.migrate((UserAdapter) destinationAdapter);
-
-    }
+//
+//    @Override
+//    public void sync(Map<String, BaseAdapter> userAdapterMap) {
+//
+//    }
+//
+//    @Override
+//    public void migrate(BaseAdapter destinationAdapter) {
+//
+////        this._store.migrate((UserAdapter) destinationAdapter);
+//
+//    }
 
     public User() {
 
     }
 
-    private User(UserAdapter.UserCallBack userCallBack) {
+    public User(String name, int age) {
+        this._name = name;
+        this._age = age;
 
-        UserStore userStore = new UserStore();
+        Map<String, BaseAdapter> userAdapterMap = new HashMap<>();
 
-        Map<String, UserAdapter> userAdapterMap = new HashMap<>();
+        userAdapterMap.put(RepositoryType.REST.toString(), new RestAdapter());
+        userAdapterMap.put(RepositoryType.SQL.toString(), new SqlAdapter());
+        userAdapterMap.put(RepositoryType.REALM.toString(), new RealmAdapter());
 
-        userAdapterMap.put(RepositoryType.REST.toString(), new UserRestAdapter(userCallBack));
-        userAdapterMap.put(RepositoryType.SQL.toString(), new UserSqlAdapter(userCallBack));
-        userAdapterMap.put(RepositoryType.REALM.toString(), new UserRealmAdapter(userCallBack));
+        Store.getInstance().registerAdapters(userAdapterMap);
 
-        userStore.registerAdapters(userAdapterMap);
-        userStore.chooseCurrentAdapter();
-
-        this._userStore = userStore;
     }
 
-//    private User(ResponseCallBack userCallBack) {
+//    private User(UserAdapter.UserCallBack userCallBack) {
 //
-//        UserStore userStore = new UserStore();
+//        Store userStore = new Store();
 //
 //        Map<String, UserAdapter> userAdapterMap = new HashMap<>();
 //
-//        userAdapterMap.put(RepositoryType.REST.toString(), new UserRestAdapter(userCallBack));
-//        userAdapterMap.put(RepositoryType.SQL.toString(), new UserSqlAdapter(userCallBack));
+//        userAdapterMap.put(RepositoryType.REST.toString(), new RestAdapter(userCallBack));
+//        userAdapterMap.put(RepositoryType.SQL.toString(), new SqlAdapter(userCallBack));
+//        userAdapterMap.put(RepositoryType.REALM.toString(), new RealmAdapter(userCallBack));
 //
 //        userStore.registerAdapters(userAdapterMap);
 //        userStore.chooseCurrentAdapter();
 //
-//        this._userStore = userStore;
+//        this._store = userStore;
 //    }
 
-    public User(String _name, int _age, UserAdapter.UserCallBack userCallBack) {
+//    private User(ResponseCallBack userCallBack) {
+//
+//        Store userStore = new Store();
+//
+//        Map<String, UserAdapter> userAdapterMap = new HashMap<>();
+//
+//        userAdapterMap.put(RepositoryType.REST.toString(), new RestAdapter(userCallBack));
+//        userAdapterMap.put(RepositoryType.SQL.toString(), new SqlAdapter(userCallBack));
+//
+//        userStore.registerAdapters(userAdapterMap);
+//        userStore.chooseCurrentAdapter();
+//
+//        this._store = userStore;
+//    }
 
-        this(userCallBack);
-        this._name = _name;
-        this._age = _age;
-    }
+//    public User(String _name, int _age, UserAdapter.UserCallBack userCallBack) {
+//
+//        this(userCallBack);
+//        this._name = _name;
+//        this._age = _age;
+//    }
 
 //    public User(String _name, int _age) {
 //        this._name = _name;
@@ -121,20 +132,24 @@ public class User extends RealmObject implements BaseModel {
 //    }
 
     public void create() {
-        this._userStore.create(this);
+        Store.getInstance().create(this);
     }
 
-    public void remove() throws StoreException {
-        this._userStore.delete(this);
-    }
+//    public void remove() throws StoreException {
+//        this._store.delete(this);
+//    }
+//
+//    public void getAll() {
+//        this._store.getAll();
+//    }
+//
+//    public Store getUserStore() {
+//        return _store;
+//    }
 
-    public void getAll() {
-        this._userStore.getAll();
-    }
+    public static void get() {
 
-    public UserStore getUserStore() {
-        return _userStore;
+        Store.getInstance().getCurrentUserAdapter().get(User.class);
     }
-
 
 }

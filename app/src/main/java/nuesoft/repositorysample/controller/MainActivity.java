@@ -7,23 +7,46 @@ import java.util.List;
 
 import io.realm.Realm;
 import nuesoft.repositorysample.R;
-import nuesoft.repositorysample.Repository.user.UserAdapter;
 import nuesoft.repositorysample.model.user.User;
 
-public class MainActivity extends AppCompatActivity implements UserAdapter.UserCallBack {
+public class MainActivity extends AppCompatActivity {
     //    ResponseCallBack<User>
     User _user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Realm.init(this);
 
+        User user = new User("Ehsan", 10);
 
-        _user = new User("Ehsan", 24, this);
-        _user.create();
-        _user.getAll();
+        user.create();
+
+//        User.get();
+//        arrayOfUser = User.get()
+
+//
+//        _user = new User("Ehsan", 24, this);
+//        _user.save(new new UserAdapter.UserCallBack() {
+//            @Override
+//            public void createUserResult(boolean result) {
+//
+//            }
+//
+//            @Override
+//            public void getAllUserResult(List<User> userList) {
+//
+//            }
+//
+//            @Override
+//            public void deleteUser(boolean result) {
+//
+//            }
+//        });
+//        _user.delete()
+
 //        _user.create();
 
 //        Realm realm = Realm.getDefaultInstance();
@@ -62,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements UserAdapter.UserC
 //
 //        for (Map.Entry<String, UserAdapter> userAdapter : user.getUserStore().getAdapters().entrySet()) {
 //
-//            if (user.getUserStore().getCurrentUserAdapter() instanceof UserRestAdapter && userAdapter instanceof UserSqlAdapter) {
+//            if (user.getUserStore().getCurrentUserAdapter() instanceof RestAdapter && userAdapter instanceof SqlAdapter) {
 //
 //                HashMap<String, UserAdapter> userAdapterHashMap = new HashMap<>();
 //                userAdapterHashMap.put(userAdapter.getKey(), userAdapter.getValue());
@@ -81,24 +104,24 @@ public class MainActivity extends AppCompatActivity implements UserAdapter.UserC
 //        }
     }
 
-    @Override
-    public void createUserResult(boolean result) {
-        System.out.println("result" + result);
-
-    }
-
-    @Override
-    public void getAllUserResult(List<User> userList) {
-
-        System.out.println("result" + userList.size());
-    }
-
-    @Override
-    public void deleteUser(boolean result) {
-
-    }
-
-
+//    @Override
+//    public void createUserResult(boolean result) {
+//        System.out.println("result" + result);
+//
+//    }
+//
+//    @Override
+//    public void getAllUserResult(List<User> userList) {
+//
+//        System.out.println("result" + userList.size());
+//    }
+//
+//    @Override
+//    public void deleteUser(boolean result) {
+//
+//    }
+//
+//
 //    @Override
 //    public void onResponse(List<User> response) {
 //        response.get(0).getUserStore();

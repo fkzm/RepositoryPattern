@@ -6,15 +6,21 @@ import java.util.List;
  * Created by mysterious on 8/15/17.
  */
 
-public abstract class BaseAdapter<T> {
+// TODO: interface?
 
-    public abstract void create(T model);
+public interface BaseAdapter {
 
-    public abstract void update(T model);
+    <T> void create(T model);
 
-    public abstract List<T> getAll();
+    <T> List<T> get(T model);
 
-    public abstract void remove(T model);
+    <T> T getOne(T model);
+
+    <T> void update(T model);
+
+    <T> void delete(T model);
+
+    <T> String getUrlFromModel(T model);
 
 
 }
