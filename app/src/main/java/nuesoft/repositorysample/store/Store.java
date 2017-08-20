@@ -5,7 +5,7 @@ import java.util.Map;
 
 import nuesoft.repositorysample.Repository.base.BaseAdapter;
 import nuesoft.repositorysample.Repository.RepositoryType;
-import nuesoft.repositorysample.exception.StoreException;
+import nuesoft.repositorysample.Repository.ResponseCallBack;
 import nuesoft.repositorysample.model.user.User;
 
 /**
@@ -18,7 +18,6 @@ public class Store {
     private static Store store = null;
 
     private Store() {
-
     }
 
     public static Store getInstance() {
@@ -26,66 +25,61 @@ public class Store {
         if (store == null) {
             store = new Store();
         }
-
         return store;
     }
 
-    private static BaseAdapter _currentUserAdapter;
-    private static Map<String, BaseAdapter> _userAdapterMap;
+    private static BaseAdapter _currentAdapter;
+    private static Map<String, BaseAdapter> _adapterMap;
 
-    private static boolean _isConnectedToInternet = false;
+    private static boolean _isConnectedToInternet = true;
 
-    public void registerAdapters(Map<String, BaseAdapter> userAdapterMap) {
-        _userAdapterMap = userAdapterMap;
+    public void registerAdapters(Map<String, BaseAdapter> adapterMap) {
+        _adapterMap = adapterMap;
         chooseCurrentAdapter();
     }
 
     private static void chooseCurrentAdapter() {
 
         if (_isConnectedToInternet) {
-
-            _currentUserAdapter = _userAdapterMap.get(RepositoryType.REST.toString());
+            _currentAdapter = _adapterMap.get(RepositoryType.REST.toString());
 
         } else {
-
-            _currentUserAdapter = _userAdapterMap.get(RepositoryType.REALM.toString());
+            _currentAdapter = _adapterMap.get(RepositoryType.REALM.toString());
         }
     }
 
-
-    public <T> T create(T model) {
-        return _currentUserAdapter.create(model);
+    public <T> void create(T model, ResponseCallBack responseCallBack) {
+        _currentAdapter.create(model, responseCallBack);
     }
 
     public <T> T delete(T model) {
-        return _currentUserAdapter.delete(model);
+        return _currentAdapter.delete(model);
     }
 
     public <T> T getOne(T model) {
-        return _currentUserAdapter.getOne(model);
+        return _currentAdapter.getOne(model);
     }
 
     public <T> List<T> getAll(T model) {
-        return _currentUserAdapter.getAll(model);
+        return _currentAdapter.getAll(model);
     }
 
     public void migrate(BaseAdapter destinationUserAdapter) {
-        _currentUserAdapter = destinationUserAdapter;
+        _currentAdapter = destinationUserAdapter;
     }
 
     public void sync(User user, Map<String, BaseAdapter> destinationAdapterList) {
 
         for (BaseAdapter userAdapter : destinationAdapterList.values()) {
             userAdapter.update(user.getClass());
-//            userAdapter.updateUser(user);
         }
     }
 
     public Map<String, BaseAdapter> getAdapters() {
-        return _userAdapterMap;
+        return _adapterMap;
     }
 
     public BaseAdapter getCurrentAdapter() {
-        return _currentUserAdapter;
+        return _currentAdapter;
     }
 }

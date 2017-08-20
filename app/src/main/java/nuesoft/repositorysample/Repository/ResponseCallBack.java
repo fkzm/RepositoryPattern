@@ -1,6 +1,4 @@
-package nuesoft.repositorysample;
-
-import java.util.List;
+package nuesoft.repositorysample.Repository;
 
 /**
  * Created by mysterious on 8/15/17.
@@ -8,7 +6,7 @@ import java.util.List;
 
 public interface ResponseCallBack<T> {
 
-    void onResponse(List<T> response);
+    void onResponse(ResponseResult<T> responseResult);
 
     void onFailure(Throwable t);
 

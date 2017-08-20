@@ -1,5 +1,6 @@
 package nuesoft.repositorysample.webService;
 
+import nuesoft.repositorysample.model.user.User;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -14,6 +15,6 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("sessions")
-    Call<ResponseBody> signIn(@Field("email") String email, @Field("password") String password);
+    Call<User> signIn(@Field("email") String email, @Field("password") String password);
 
 }

@@ -4,13 +4,10 @@ import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 import nuesoft.repositorysample.Repository.base.BaseAdapter;
-import nuesoft.repositorysample.model.user.User;
 
 /**
  * Created by mysterious on 8/16/17.
@@ -21,8 +18,8 @@ public class RealmAdapter implements BaseAdapter {
     private Realm _realm;
 
     @Override
-    public <T> T create(T model) {
-        
+    public <T> void create(T model, ResponseCallBack responseCallBack) {
+
         Method method = null;
         try {
 
@@ -38,8 +35,6 @@ public class RealmAdapter implements BaseAdapter {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
-        return model;
     }
 
     @Override

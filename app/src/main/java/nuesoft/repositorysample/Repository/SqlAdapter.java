@@ -1,11 +1,8 @@
 package nuesoft.repositorysample.Repository;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 import nuesoft.repositorysample.Repository.base.BaseAdapter;
-import nuesoft.repositorysample.model.user.User;
 
 /**
  * Created by mysterious on 8/14/17.
@@ -14,8 +11,8 @@ import nuesoft.repositorysample.model.user.User;
 public class SqlAdapter implements BaseAdapter {
 
     @Override
-    public <T> T create(T model) {
-        return null;
+    public <T> void create(T model, ResponseCallBack responseCallBack) {
+
     }
 
     @Override

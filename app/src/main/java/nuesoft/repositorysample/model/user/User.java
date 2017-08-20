@@ -9,6 +9,7 @@ import nuesoft.repositorysample.Repository.base.BaseAdapter;
 import nuesoft.repositorysample.Repository.RealmAdapter;
 import nuesoft.repositorysample.Repository.RestAdapter;
 import nuesoft.repositorysample.Repository.SqlAdapter;
+import nuesoft.repositorysample.Repository.ResponseCallBack;
 import nuesoft.repositorysample.model.base.BaseModel;
 import nuesoft.repositorysample.store.Store;
 
@@ -18,11 +19,9 @@ import nuesoft.repositorysample.store.Store;
 
 public class User extends BaseModel {
 
-    //    @PrimaryKey
     private int _nationalCode;
     private String _name;
     private int _age;
-
 
     public int getNationalCode() {
         return _nationalCode;
@@ -67,24 +66,24 @@ public class User extends BaseModel {
     }
 
 
-    public User create() {
-        return Store.getInstance().getCurrentAdapter().create(this);
+    public void create(ResponseCallBack<User> responseCallBack) {
+        Store.getInstance().create(this, responseCallBack);
     }
 
     public User delete() {
-        return Store.getInstance().getCurrentAdapter().delete(this);
+        return Store.getInstance().delete(this);
     }
 
     public static List<User> getAll() {
-        return Store.getInstance().getCurrentAdapter().getAll(new User());
+        return Store.getInstance().getAll(new User());
     }
 
     public static User getOne() {
-        return Store.getInstance().getCurrentAdapter().getOne(new User());
+        return Store.getInstance().getOne(new User());
     }
 
     public User update() {
-        return Store.getInstance().getCurrentAdapter().delete(this);
+        return Store.getInstance().delete(this);
     }
 
 

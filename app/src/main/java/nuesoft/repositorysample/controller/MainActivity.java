@@ -3,10 +3,10 @@ package nuesoft.repositorysample.controller;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.List;
-
 import io.realm.Realm;
 import nuesoft.repositorysample.R;
+import nuesoft.repositorysample.Repository.ResponseResult;
+import nuesoft.repositorysample.Repository.ResponseCallBack;
 import nuesoft.repositorysample.model.user.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,10 +18,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
         Realm.init(this);
 
         User user = new User("Ehsan", 10);
-        user.create();
+
+        user.create(new ResponseCallBack<User>() {
+
+            @Override
+            public void onResponse(ResponseResult<User> responseResult) {
+
+
+                System.out.println(responseResult.getStatus());
+                System.out.println(responseResult.getResponseList().size());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
 
 //        User.getAll();
 //        arrayOfUser = User.getAll()

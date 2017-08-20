@@ -2,6 +2,8 @@ package nuesoft.repositorysample.Repository.base;
 
 import java.util.List;
 
+import nuesoft.repositorysample.Repository.ResponseCallBack;
+
 /**
  * Created by mysterious on 8/15/17.
  */
@@ -9,7 +11,7 @@ import java.util.List;
 
 public interface BaseAdapter {
 
-    <T> T create(T model);
+    <T> void create(T model, ResponseCallBack responseCallBack);
 
     <T> List<T> getAll(T model);
 
@@ -20,5 +22,4 @@ public interface BaseAdapter {
     <T> T delete(T model);
 
     <T> String getUrlFromModel(T model);
-
 }

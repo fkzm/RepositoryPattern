@@ -1,14 +1,12 @@
 package nuesoft.repositorysample.Repository;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import nuesoft.repositorysample.Repository.base.BaseAdapter;
 import nuesoft.repositorysample.model.user.User;
 import nuesoft.repositorysample.webService.ApiClient;
 import nuesoft.repositorysample.webService.ApiInterface;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,8 +18,34 @@ import retrofit2.Response;
 public class RestAdapter implements BaseAdapter {
 
     @Override
-    public <T> T create(T model) {
-        return null;
+    public <T> void create(T model, final ResponseCallBack responseCallBack) {
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+        apiInterface.signIn("", "").enqueue(new Callback<User>() {
+
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+
+                List<User> userList = new ArrayList<User>();
+
+                if (response.isSuccessful()) {
+                    userList.add(response.body());
+                }
+
+
+                ResponseResult<User> r = new ResponseResult<>(response.code(), userList);
+                responseCallBack.onResponse(r);
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+                responseCallBack.onFailure(t);
+
+            }
+        });
     }
 
     @Override
@@ -67,7 +91,7 @@ public class RestAdapter implements BaseAdapter {
 //        _apiInterface.signIn("", "").enqueue(new Callback<ResponseBody>() {
 //
 //            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//            public void onResponse(Call<ResponseBody> call, ResponseResult<ResponseBody> response) {
 //                _userCallBack.createUserResult(true);
 //            }
 //
@@ -88,7 +112,7 @@ public class RestAdapter implements BaseAdapter {
 //
 //        _apiInterface.signIn("", "").enqueue(new Callback<ResponseBody>() {
 //            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//            public void onResponse(Call<ResponseBody> call, ResponseResult<ResponseBody> response) {
 //
 //                _userCallBack.createUserResult(true);
 //            }

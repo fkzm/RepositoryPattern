@@ -2,7 +2,6 @@ package nuesoft.repositorysample.model.user;
 
 import java.util.Map;
 
-import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import nuesoft.repositorysample.Repository.base.BaseAdapter;
 import nuesoft.repositorysample.model.base.BaseModel;
