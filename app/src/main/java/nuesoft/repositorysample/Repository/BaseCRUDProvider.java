@@ -1,20 +1,18 @@
-package nuesoft.repositorysample.Repository.base;
+package nuesoft.repositorysample.Repository;
 
 import java.util.List;
 
-import nuesoft.repositorysample.Repository.ResponseCallBack;
 import nuesoft.repositorysample.model.base.BaseModel;
 
 /**
- * Created by mysterious on 8/15/17.
+ * Created by mysterious on 8/20/17.
  */
 
-
-public interface BaseAdapter {
+public interface BaseCRUDProvider {
 
     <T extends BaseModel> void save(T model, ResponseCallBack responseCallBack);
 
-    <T> List<T> getAll(ResponseCallBack responseCallBack);
+    <T extends BaseModel> List<T> getAll(ResponseCallBack responseCallBack);
 
     <T> T getOne(int id, ResponseCallBack responseCallBack);
 
@@ -23,4 +21,5 @@ public interface BaseAdapter {
     <T> T delete(T model, ResponseCallBack responseCallBack);
 
     <T> String getUrlFromModel(T model);
+
 }

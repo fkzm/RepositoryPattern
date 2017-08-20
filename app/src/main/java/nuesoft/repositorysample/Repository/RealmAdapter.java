@@ -8,6 +8,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import nuesoft.repositorysample.Repository.base.BaseAdapter;
+import nuesoft.repositorysample.model.base.BaseModel;
 
 /**
  * Created by mysterious on 8/16/17.
@@ -17,43 +18,28 @@ public class RealmAdapter implements BaseAdapter {
 
     private Realm _realm;
 
+
     @Override
-    public <T> void create(T model, ResponseCallBack responseCallBack) {
-
-        Method method = null;
-        try {
-
-            method = model.getClass().getMethod("getName");
-            String name = (String) method.invoke(model);
-            Log.d("name", "" + name);
-
-
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+    public <T extends BaseModel> void save(T model, ResponseCallBack responseCallBack) {
     }
 
     @Override
-    public <T> List<T> getAll(T model) {
+    public <T> List<T> getAll(ResponseCallBack responseCallBack) {
         return null;
     }
 
     @Override
-    public <T> T getOne(T model) {
+    public <T> T getOne(int id, ResponseCallBack responseCallBack) {
         return null;
     }
 
     @Override
-    public <T> T update(T model) {
+    public <T> T update(T model, ResponseCallBack responseCallBack) {
         return null;
     }
 
     @Override
-    public <T> T delete(T model) {
+    public <T> T delete(T model, ResponseCallBack responseCallBack) {
         return null;
     }
 
@@ -61,6 +47,27 @@ public class RealmAdapter implements BaseAdapter {
     public <T> String getUrlFromModel(T model) {
         return null;
     }
+
+//    @Override
+//    public <T> void create(T model, ResponseCallBack responseCallBack) {
+//
+//        Method method = null;
+//        try {
+//
+//            method = model.getClass().getMethod("getName");
+//            String name = (String) method.invoke(model);
+//            Log.d("name", "" + name);
+//
+//
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
 
 //    @Override
 //    public <T> void create(Class<T> model) {

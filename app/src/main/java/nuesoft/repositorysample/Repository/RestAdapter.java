@@ -1,9 +1,11 @@
 package nuesoft.repositorysample.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import nuesoft.repositorysample.Repository.base.BaseAdapter;
+import nuesoft.repositorysample.model.base.BaseModel;
 import nuesoft.repositorysample.model.user.User;
 import nuesoft.repositorysample.webService.ApiClient;
 import nuesoft.repositorysample.webService.ApiInterface;
@@ -18,56 +20,71 @@ import retrofit2.Response;
 public class RestAdapter implements BaseAdapter {
 
     @Override
-    public <T> void create(T model, final ResponseCallBack responseCallBack) {
+    public <T extends BaseModel> void save(T model, final ResponseCallBack responseCallBack) {
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        apiInterface.signIn("", "").enqueue(new Callback<User>() {
+        HashMap<String, Object> map = model.toHashMap();
 
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-
-                List<User> userList = new ArrayList<User>();
-
-                if (response.isSuccessful()) {
-                    userList.add(response.body());
-                }
-
-
-                ResponseResult<User> r = new ResponseResult<>(response.code(), userList);
-                responseCallBack.onResponse(r);
-
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-
-                responseCallBack.onFailure(t);
-
-            }
-        });
+//            apiInterface.signInV2((User) model).enqueue(new Callback<User>() {
+//                @Override
+//                public void onResponse(Call<User> call, Response<User> response) {
+//
+//                    System.out.println("" + response.code());
+//                }
+//
+//                @Override
+//                public void onFailure(Call<User> call, Throwable t) {
+//
+//                }
+//            });
     }
 
     @Override
-    public <T> List<T> getAll(T model) {
+    public <T> List<T> getAll(ResponseCallBack responseCallBack) {
         return null;
     }
 
     @Override
-    public <T> T getOne(T model) {
+    public <T> T getOne(int id, ResponseCallBack responseCallBack) {
         return null;
     }
 
     @Override
-    public <T> T update(T model) {
+    public <T> T update(T model, ResponseCallBack responseCallBack) {
         return null;
-
     }
 
     @Override
-    public <T> T delete(T model) {
+    public <T> T delete(T model, ResponseCallBack responseCallBack) {
         return null;
     }
+
+//        apiInterface.signIn("", "").enqueue(new Callback<User>() {
+//
+//            @Override
+//            public void onResponse(Call<User> call, Response<User> response) {
+//
+//                List<User> userList = new ArrayList<User>();
+//
+//                if (response.isSuccessful()) {
+//                    userList.add(response.body());
+//                }
+//
+//
+//                ResponseResult<User> r = new ResponseResult<>(response.code(), userList);
+//                responseCallBack.onResponse(r);
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<User> call, Throwable t) {
+//
+//                responseCallBack.onFailure(t);
+//
+//            }
+//        });
+
 
     @Override
     public <T> String getUrlFromModel(T model) {
