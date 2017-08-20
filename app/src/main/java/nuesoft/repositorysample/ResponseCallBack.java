@@ -11,4 +11,5 @@ public interface ResponseCallBack<T> {
     void onResponse(List<T> response);
 
     void onFailure(Throwable t);
+
 }

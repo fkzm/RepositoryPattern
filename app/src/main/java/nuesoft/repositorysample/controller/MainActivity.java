@@ -10,7 +10,7 @@ import nuesoft.repositorysample.R;
 import nuesoft.repositorysample.model.user.User;
 
 public class MainActivity extends AppCompatActivity {
-    //    ResponseCallBack<User>
+
     User _user;
 
     @Override
@@ -21,11 +21,10 @@ public class MainActivity extends AppCompatActivity {
         Realm.init(this);
 
         User user = new User("Ehsan", 10);
-
         user.create();
 
-//        User.get();
-//        arrayOfUser = User.get()
+//        User.getAll();
+//        arrayOfUser = User.getAll()
 
 //
 //        _user = new User("Ehsan", 24, this);
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        for (Map.Entry<String, UserAdapter> userAdapter : user.getUserStore().getAdapters().entrySet()) {
 //
-//            if (user.getUserStore().getCurrentUserAdapter() instanceof RestAdapter && userAdapter instanceof SqlAdapter) {
+//            if (user.getUserStore().getCurrentAdapter() instanceof RestAdapter && userAdapter instanceof SqlAdapter) {
 //
 //                HashMap<String, UserAdapter> userAdapterHashMap = new HashMap<>();
 //                userAdapterHashMap.put(userAdapter.getKey(), userAdapter.getValue());
@@ -104,27 +103,11 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
-//    @Override
-//    public void createUserResult(boolean result) {
-//        System.out.println("result" + result);
-//
-//    }
-//
-//    @Override
-//    public void getAllUserResult(List<User> userList) {
-//
-//        System.out.println("result" + userList.size());
-//    }
-//
-//    @Override
-//    public void deleteUser(boolean result) {
-//
-//    }
 //
 //
 //    @Override
 //    public void onResponse(List<User> response) {
-//        response.get(0).getUserStore();
+//        response.getAll(0).getUserStore();
 //    }
 //
 //    @Override

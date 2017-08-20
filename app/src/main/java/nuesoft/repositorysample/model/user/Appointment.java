@@ -11,7 +11,7 @@ import nuesoft.repositorysample.model.base.BaseModel;
  * Created by mysterious on 8/16/17.
  */
 
-public class Appointment extends RealmObject implements BaseModel {
+public class Appointment extends BaseModel {
 
     @PrimaryKey
     private int _id;

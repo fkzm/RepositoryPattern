@@ -1,4 +1,4 @@
-package nuesoft.repositorysample.Repository.user;
+package nuesoft.repositorysample.Repository;
 
 import android.util.Log;
 
@@ -21,14 +21,15 @@ public class RealmAdapter implements BaseAdapter {
     private Realm _realm;
 
     @Override
-    public <T> void create(T model) {
+    public <T> T create(T model) {
+        
         Method method = null;
         try {
-
 
             method = model.getClass().getMethod("getName");
             String name = (String) method.invoke(model);
             Log.d("name", "" + name);
+
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -37,10 +38,12 @@ public class RealmAdapter implements BaseAdapter {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        return model;
     }
 
     @Override
-    public <T> List<T> get(T model) {
+    public <T> List<T> getAll(T model) {
         return null;
     }
 
@@ -50,13 +53,13 @@ public class RealmAdapter implements BaseAdapter {
     }
 
     @Override
-    public <T> void update(T model) {
-
+    public <T> T update(T model) {
+        return null;
     }
 
     @Override
-    public <T> void delete(T model) {
-
+    public <T> T delete(T model) {
+        return null;
     }
 
     @Override
@@ -79,30 +82,7 @@ public class RealmAdapter implements BaseAdapter {
 //        }
 //    }
 //
-//    @Override
-//    public <T> List<T> get(Class<T> model) {
-//        return null;
-//    }
-//
-//    @Override
-//    public <T> T getOne(Class<T> model) {
-//        return null;
-//    }
-//
-//    @Override
-//    public <T> void update(Class<T> model) {
-//
-//    }
-//
-//    @Override
-//    public <T> void delete(Class<T> model) {
-//
-//    }
-//
-//    @Override
-//    public <T> String getUrlFromModel(Class<T> model) {
-//        return null;
-//    }
+
 
 //    public RealmAdapter(UserAdapter.UserCallBack userCallBack) {
 //        super(userCallBack);

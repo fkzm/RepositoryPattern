@@ -1,4 +1,4 @@
-package nuesoft.repositorysample.Repository.user;
+package nuesoft.repositorysample.Repository;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,13 +18,14 @@ import retrofit2.Response;
  */
 
 public class RestAdapter implements BaseAdapter {
-    @Override
-    public <T> void create(T model) {
 
+    @Override
+    public <T> T create(T model) {
+        return null;
     }
 
     @Override
-    public <T> List<T> get(T model) {
+    public <T> List<T> getAll(T model) {
         return null;
     }
 
@@ -34,20 +35,20 @@ public class RestAdapter implements BaseAdapter {
     }
 
     @Override
-    public <T> void update(T model) {
+    public <T> T update(T model) {
+        return null;
 
     }
 
     @Override
-    public <T> void delete(T model) {
-
+    public <T> T delete(T model) {
+        return null;
     }
 
     @Override
     public <T> String getUrlFromModel(T model) {
         return null;
     }
-
 
 //
 //    protected String getUrlForModel(modelType) {
@@ -76,23 +77,6 @@ public class RestAdapter implements BaseAdapter {
 //            }
 //        });
 //    }
-//
-//    @Override
-//    public void update(User model) {
-//        System.out.println("User has updated in rest: " + model.getName());
-//
-//    }
-//
-//    @Override
-//    public List<User> getAll() {
-//        return null;
-//    }
-//
-//    @Override
-//    public void remove(User model) {
-//        System.out.println("User has removed in rest: " + model.getName());
-//
-//    }
 
 
 //    @Override
@@ -115,12 +99,6 @@ public class RestAdapter implements BaseAdapter {
 //                _userCallBack.createUserResult(false);
 //            }
 //        });
-//    }
-
-//    @Override
-//    void delete(User user) throws NoRestStore {
-//
-//        throw new NoRestStore("No delete in rest");
 //    }
 
 }

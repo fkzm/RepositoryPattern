@@ -1,5 +1,6 @@
 package nuesoft.repositorysample.store;
 
+import java.util.List;
 import java.util.Map;
 
 import nuesoft.repositorysample.Repository.base.BaseAdapter;
@@ -11,8 +12,6 @@ import nuesoft.repositorysample.model.user.User;
  * Created by mysterious on 8/14/17.
  */
 
-// TODO: Singleton
-// TODO: Registry Pattern
 
 public class Store {
 
@@ -36,10 +35,9 @@ public class Store {
 
     private static boolean _isConnectedToInternet = false;
 
-    public  void registerAdapters(Map<String, BaseAdapter> userAdapterMap) {
+    public void registerAdapters(Map<String, BaseAdapter> userAdapterMap) {
         _userAdapterMap = userAdapterMap;
         chooseCurrentAdapter();
-
     }
 
     private static void chooseCurrentAdapter() {
@@ -55,22 +53,20 @@ public class Store {
     }
 
 
-    public void create(User user) {
-        _currentUserAdapter.create(user);
-//        _currentUserAdapter.create(user);
-//        _currentUserAdapter.create(user);
+    public <T> T create(T model) {
+        return _currentUserAdapter.create(model);
     }
 
-    public void delete(User user) throws StoreException {
-
-//        _currentUserAdapter.remove(user);
-//        _currentUserAdapter.delete(user);
-
+    public <T> T delete(T model) {
+        return _currentUserAdapter.delete(model);
     }
 
-    public void getAll() {
-//        _currentUserAdapter.getAll();
-//        _currentUserAdapter.getAll();
+    public <T> T getOne(T model) {
+        return _currentUserAdapter.getOne(model);
+    }
+
+    public <T> List<T> getAll(T model) {
+        return _currentUserAdapter.getAll(model);
     }
 
     public void migrate(BaseAdapter destinationUserAdapter) {
@@ -89,7 +85,7 @@ public class Store {
         return _userAdapterMap;
     }
 
-    public BaseAdapter getCurrentUserAdapter() {
+    public BaseAdapter getCurrentAdapter() {
         return _currentUserAdapter;
     }
 }

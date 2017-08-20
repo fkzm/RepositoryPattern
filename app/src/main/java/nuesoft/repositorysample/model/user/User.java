@@ -1,17 +1,14 @@
 package nuesoft.repositorysample.model.user;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
-import io.realm.annotations.PrimaryKey;
 import nuesoft.repositorysample.Repository.RepositoryType;
 import nuesoft.repositorysample.Repository.base.BaseAdapter;
-import nuesoft.repositorysample.Repository.user.RealmAdapter;
-import nuesoft.repositorysample.Repository.user.RestAdapter;
-import nuesoft.repositorysample.Repository.user.SqlAdapter;
-import nuesoft.repositorysample.exception.StoreException;
+import nuesoft.repositorysample.Repository.RealmAdapter;
+import nuesoft.repositorysample.Repository.RestAdapter;
+import nuesoft.repositorysample.Repository.SqlAdapter;
 import nuesoft.repositorysample.model.base.BaseModel;
 import nuesoft.repositorysample.store.Store;
 
@@ -19,7 +16,7 @@ import nuesoft.repositorysample.store.Store;
  * Created by mysterious on 8/14/17.
  */
 
-public class User {
+public class User extends BaseModel {
 
     //    @PrimaryKey
     private int _nationalCode;
@@ -50,18 +47,7 @@ public class User {
     public void setAge(int age) {
         this._age = age;
     }
-//
-//    @Override
-//    public void sync(Map<String, BaseAdapter> userAdapterMap) {
-//
-//    }
-//
-//    @Override
-//    public void migrate(BaseAdapter destinationAdapter) {
-//
-////        this._store.migrate((UserAdapter) destinationAdapter);
-//
-//    }
+
 
     public User() {
 
@@ -72,7 +58,6 @@ public class User {
         this._age = age;
 
         Map<String, BaseAdapter> userAdapterMap = new HashMap<>();
-
         userAdapterMap.put(RepositoryType.REST.toString(), new RestAdapter());
         userAdapterMap.put(RepositoryType.SQL.toString(), new SqlAdapter());
         userAdapterMap.put(RepositoryType.REALM.toString(), new RealmAdapter());
@@ -80,6 +65,28 @@ public class User {
         Store.getInstance().registerAdapters(userAdapterMap);
 
     }
+
+
+    public User create() {
+        return Store.getInstance().getCurrentAdapter().create(this);
+    }
+
+    public User delete() {
+        return Store.getInstance().getCurrentAdapter().delete(this);
+    }
+
+    public static List<User> getAll() {
+        return Store.getInstance().getCurrentAdapter().getAll(new User());
+    }
+
+    public static User getOne() {
+        return Store.getInstance().getCurrentAdapter().getOne(new User());
+    }
+
+    public User update() {
+        return Store.getInstance().getCurrentAdapter().delete(this);
+    }
+
 
 //    private User(UserAdapter.UserCallBack userCallBack) {
 //
@@ -131,25 +138,22 @@ public class User {
 //        this._age = _age;
 //    }
 
-    public void create() {
-        Store.getInstance().create(this);
-    }
 
-//    public void remove() throws StoreException {
-//        this._store.delete(this);
-//    }
-//
-//    public void getAll() {
-//        this._store.getAll();
-//    }
 //
 //    public Store getUserStore() {
 //        return _store;
 //    }
 
-    public static void get() {
 
-        Store.getInstance().getCurrentUserAdapter().get(User.class);
+    @Override
+    public void sync(Map<String, BaseAdapter> userAdapterMap) {
+
     }
 
+    @Override
+    public void migrate(BaseAdapter destinationAdapter) {
+
+//        this._store.migrate((UserAdapter) destinationAdapter);
+
+    }
 }
