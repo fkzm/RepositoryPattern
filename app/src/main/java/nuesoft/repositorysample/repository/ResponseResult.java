@@ -1,4 +1,4 @@
-package nuesoft.repositorysample.Repository;
+package nuesoft.repositorysample.repository;
 
 import java.util.List;
 
@@ -11,6 +11,10 @@ public class ResponseResult<T> {
     private int status;
     private String description;
     private List<T> responseList;
+
+    public ResponseResult() {
+
+    }
 
     public ResponseResult(int status, String description) {
         this.status = status;

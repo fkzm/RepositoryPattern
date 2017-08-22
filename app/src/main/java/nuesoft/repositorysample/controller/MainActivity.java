@@ -5,9 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import io.realm.Realm;
 import nuesoft.repositorysample.R;
-import nuesoft.repositorysample.Repository.ResponseCallBack;
-import nuesoft.repositorysample.Repository.ResponseResult;
+import nuesoft.repositorysample.repository.ResponseCallBack;
+import nuesoft.repositorysample.repository.ResponseResult;
 import nuesoft.repositorysample.model.user.User;
+import nuesoft.repositorysample.store.Store;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,21 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        Realm.init(this);
-
-        User.getAll(new ResponseCallBack() {
-            @Override
-            public void onResponse(ResponseResult responseResult) {
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
-
-        User user = new User("Ehsan");
+        User user = new User("hamed@carrene.com", "123456");
 
         user.save(new ResponseCallBack() {
             @Override
@@ -45,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
 
     }
 }

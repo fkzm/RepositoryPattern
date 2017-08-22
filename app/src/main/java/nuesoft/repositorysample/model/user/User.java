@@ -1,14 +1,15 @@
 package nuesoft.repositorysample.model.user;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import nuesoft.repositorysample.Repository.ResponseCallBack;
-import nuesoft.repositorysample.Repository.base.BaseAdapter;
 import nuesoft.repositorysample.model.base.BaseModel;
-import nuesoft.repositorysample.model.base.Field;
 import nuesoft.repositorysample.model.base.Metadata;
+import nuesoft.repositorysample.model.base.MyField;
+import nuesoft.repositorysample.repository.ResponseCallBack;
+import nuesoft.repositorysample.repository.base.IAdapter;
+import nuesoft.repositorysample.store.Store;
 
 /**
  * Created by mysterious on 8/14/17.
@@ -16,52 +17,58 @@ import nuesoft.repositorysample.model.base.Metadata;
 
 public class User extends BaseModel {
 
-    private String name;
+    private String email;
+    private String password;
 
 
-    public User(BaseAdapter baseAdapter) {
-        super(baseAdapter);
+    @Override
+    public String getUrl() {
+        return "apiv1/sessions";
     }
 
-    public User(String name) {
-        this.name = name;
+    @Override
+    public String getTableName() {
+        return "USER";
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public Metadata getMetadata() {
+
+        Metadata metadata;
+
+        List<MyField> myFieldList = new ArrayList<>();
+
+        for (Field field : this.getClass().getDeclaredFields()) {
+            String filedName = field.getName();
+            myFieldList.add(new MyField(filedName));
+        }
+        metadata = new Metadata("USER", myFieldList);
+        return metadata;
     }
 
     public void save(ResponseCallBack responseCallBack) {
         this.getAdapter().save(this, responseCallBack);
     }
 
-    public void delete(ResponseCallBack responseCallBack) {
-        this.getAdapter().delete(this, responseCallBack);
+
+    public User(String email, String password) {
+        super(Store.getInstance().getCurrentAdapter());
+        this.email = email;
+        this.password = password;
     }
 
-    public void update(ResponseCallBack responseCallBack) {
-        this.getAdapter().update(this, responseCallBack);
+    public User(IAdapter iAdapter, String email, String password) {
+        super(iAdapter);
+        this.email = email;
+        this.password = password;
     }
 
-    @Override
-    public String getUrl() {
-        return null;
+    public String getEmail() {
+        return this.email;
     }
 
-    @Override
-    public Metadata getMetadata() {
-        String name = "User";
-        List<Field> fields = new ArrayList<>();
-        fields.add(new Field("name"));
-        return new Metadata(name, fields);
+    public String getPassword() {
+        return this.password;
     }
 
-    @Override
-    public void sync(Map<String, BaseAdapter> userAdapterMap) {
-    }
-
-    @Override
-    public void migrate(BaseAdapter destinationAdapter) {
-
-    }
 }

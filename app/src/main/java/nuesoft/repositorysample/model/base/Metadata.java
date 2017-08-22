@@ -10,18 +10,18 @@ public class Metadata {
 
     private String name;
 
-    private List<Field> fields;
+    private List<MyField> myFields;
 
-    public Metadata(String name, List<Field> fields) {
+    public Metadata(String name, List<MyField> myFields) {
         this.name = name;
-        this.fields = fields;
+        this.myFields = myFields;
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Field> getFields() {
-        return fields;
+    public List<MyField> getMyFields() {
+        return myFields;
     }
 }

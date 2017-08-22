@@ -4,12 +4,12 @@ package nuesoft.repositorysample.model.base;
  * Created by mysterious on 8/20/17.
  */
 
-public class Field {
+public class MyField {
 
     private String name;
     private String title;
 
-    public Field(String name) {
+    public MyField(String name) {
         this.name = name;
     }
 

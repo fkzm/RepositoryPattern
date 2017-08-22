@@ -3,10 +3,9 @@ package nuesoft.repositorysample.store;
 import java.util.HashMap;
 import java.util.Map;
 
-import nuesoft.repositorysample.Repository.RealmAdapter;
-import nuesoft.repositorysample.Repository.RestAdapter;
-import nuesoft.repositorysample.Repository.base.BaseAdapter;
-import nuesoft.repositorysample.model.user.User;
+import nuesoft.repositorysample.MyApp;
+import nuesoft.repositorysample.repository.RestAdapter;
+import nuesoft.repositorysample.repository.base.IAdapter;
 
 /**
  * Created by mysterious on 8/14/17.
@@ -16,39 +15,50 @@ import nuesoft.repositorysample.model.user.User;
 public class Store {
 
     private static Store store = null;
+    private static IAdapter _currentAdapter;
+    private static Map<String, IAdapter> _adaptersMap;
+    private static boolean _isConnectedToInternet = true;
+
 
     private Store() {
+
     }
 
     public static Store getInstance() {
 
         if (store == null) {
             store = new Store();
-            Map<String, BaseAdapter> adapterMap = new HashMap<>();
-            adapterMap.put("REST", new RestAdapter());
-            adapterMap.put("REALM", new RealmAdapter());
+            Map<String, IAdapter> adapterMap = new HashMap<>();
+            adapterMap.put("REST", new RestAdapter(MyApp.getInstance()));
             registerAdapters(adapterMap);
         }
-
         return store;
     }
 
-    private static BaseAdapter _currentAdapter;
-    private static Map<String, BaseAdapter> _adapterMap;
-    private static boolean _isConnectedToInternet = true;
-
-    public static void registerAdapters(Map<String, BaseAdapter> adapterMap) {
-        _adapterMap = adapterMap;
+    private static void registerAdapters(Map<String, IAdapter> adapterMap) {
+        _adaptersMap = adapterMap;
     }
 
-    public BaseAdapter getCurrentAdapter() {
+    public IAdapter getCurrentAdapter() {
 
         if (_isConnectedToInternet) {
-            _currentAdapter = _adapterMap.get("REST");
+            _currentAdapter = _adaptersMap.get("REST");
 
         } else {
-            _currentAdapter = _adapterMap.get("REALM");
+            _currentAdapter = _adaptersMap.get("REALM");
         }
         return _currentAdapter;
+    }
+
+    public void setAdapter(IAdapter adapter) {
+        _currentAdapter = adapter;
+    }
+
+    public Map<String, IAdapter> getAdapters() {
+        return _adaptersMap;
+    }
+
+    public IAdapter getAdapter(String adapterMapName) {
+        return _adaptersMap.get(adapterMapName);
     }
 }
