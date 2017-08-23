@@ -1,12 +1,14 @@
 package nuesoft.repositorysample.repository;
 
+import nuesoft.repositorysample.webService.Response;
+
 /**
  * Created by mysterious on 8/15/17.
  */
 
-public interface ResponseCallBack<T> {
+public interface ResponseCallBack {
 
-    void onResponse(ResponseResult<T> responseResult);
+    void onResponse(Response response);
 
     void onFailure(Throwable t);
 

@@ -1,15 +1,10 @@
 package nuesoft.repositorysample.webService;
 
-import java.util.List;
 import java.util.Map;
 
-import nuesoft.repositorysample.model.base.BaseModel;
-import nuesoft.repositorysample.model.user.User;
-import nuesoft.repositorysample.repository.ResponseCallBack;
+import nuesoft.repositorysample.model.User;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -36,6 +31,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST()
     Call<ResponseBody> createBaseModel(@Url String url, @FieldMap Map<String, String> body, @HeaderMap Map<String, String> headerMap);
+
 
     @GET
     Call<ResponseBody> getBaseModel(@Url String url, @HeaderMap Map<String, String> headerMap);

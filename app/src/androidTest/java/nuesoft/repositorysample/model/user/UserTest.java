@@ -2,6 +2,7 @@ package nuesoft.repositorysample.model.user;
 
 import org.junit.Test;
 
+import nuesoft.repositorysample.model.User;
 import nuesoft.repositorysample.repository.ResponseCallBack;
 import nuesoft.repositorysample.repository.ResponseResult;
 import nuesoft.repositorysample.store.Store;

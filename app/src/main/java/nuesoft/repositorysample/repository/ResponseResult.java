@@ -11,9 +11,18 @@ public class ResponseResult<T> {
     private int status;
     private String description;
     private List<T> responseList;
+    private String responseBody;
 
     public ResponseResult() {
 
+    }
+
+    public void setResponseBody(String responseBody) {
+        this.responseBody = responseBody;
+    }
+
+    public String getResponseBody() {
+        return responseBody;
     }
 
     public ResponseResult(int status, String description) {

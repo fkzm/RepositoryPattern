@@ -1,4 +1,4 @@
-package nuesoft.repositorysample.model.user;
+package nuesoft.repositorysample.model;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -9,13 +9,31 @@ import nuesoft.repositorysample.model.base.Metadata;
 import nuesoft.repositorysample.model.base.MyField;
 
 /**
- * Created by mysterious on 8/22/17.
+ * Created by mysterious on 8/23/17.
  */
 
-public class Code extends BaseModel {
+public class Session extends BaseModel {
+
+
+    private String email;
+    private String password;
+
+    public Session(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     @Override
     public String getUrl() {
-        return "apiv1/collections";
+        return "apiv1/sessions";
     }
 
     @Override
@@ -25,7 +43,6 @@ public class Code extends BaseModel {
 
     @Override
     public Metadata getMetadata() {
-
         Metadata metadata;
 
         List<MyField> myFieldList = new ArrayList<>();
@@ -34,7 +51,7 @@ public class Code extends BaseModel {
             String filedName = field.getName();
             myFieldList.add(new MyField(filedName));
         }
-        metadata = new Metadata("USER", myFieldList);
+        metadata = new Metadata("SESSION", myFieldList);
         return metadata;
     }
 }

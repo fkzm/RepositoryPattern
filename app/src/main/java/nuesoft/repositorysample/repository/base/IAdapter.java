@@ -1,20 +1,23 @@
 package nuesoft.repositorysample.repository.base;
 
+import nuesoft.repositorysample.model.base.BaseModel;
+import nuesoft.repositorysample.repository.ResponseCallBack;
+
 /**
  * Created by mysterious on 8/15/17.
  */
 
 
-public interface IAdapter extends BaseCRUDProvider {
-
+public abstract class IAdapter implements BaseCRUDProvider {
 
 
 //    @Override
 //    <T extends BaseModel> void save(T model, ResponseCallBack responseCallBack);
 
-//    //static method
-//    public static <T extends BaseModel> void getOne(int id, ResponseCallBack responseCallBack) {
-//    }
+    //    //static method
+    public <T extends BaseModel> void getAll(ResponseCallBack responseCallBack) {
+
+    }
 
 
 }

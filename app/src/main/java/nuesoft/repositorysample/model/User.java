@@ -1,4 +1,4 @@
-package nuesoft.repositorysample.model.user;
+package nuesoft.repositorysample.model;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -61,6 +61,11 @@ public class User extends BaseModel {
         super(iAdapter);
         this.email = email;
         this.password = password;
+    }
+
+    public void login(String email, String password, ResponseCallBack responseCallBack) {
+        Session session = new Session(email, password);
+        this.getAdapter().save(session, responseCallBack);
     }
 
     public String getEmail() {

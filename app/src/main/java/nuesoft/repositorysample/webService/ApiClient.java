@@ -33,9 +33,9 @@ public class ApiClient {
 
         if (retrofit == null) {
 
-//            ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
+            ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
 
-//            JWTTokenHelper.init(context, "KEY");
+            JWTTokenHelper.init(context, "KEY");
 
             final OkHttpClient okClient = new OkHttpClient.Builder().readTimeout(3, TimeUnit.MINUTES).connectTimeout(3, TimeUnit.MINUTES)
                     .addInterceptor(
@@ -44,10 +44,10 @@ public class ApiClient {
                                 public Response intercept(Interceptor.Chain chain) throws IOException {
                                     Request request = chain.request();
 
-//                                    if (JWTTokenHelper.hasJwtToken()) {
-//                                        String token = JWTTokenHelper.getJwtToken();
-//                                        request = request.newBuilder().addHeader("Authorization", "Bearer " + token).build();
-//                                    }
+                                    if (JWTTokenHelper.hasJwtToken()) {
+                                        String token = JWTTokenHelper.getJwtToken();
+                                        request = request.newBuilder().addHeader("Authorization", "Bearer " + token).build();
+                                    }
 
                                     Response response = chain.proceed(request);
 
@@ -70,10 +70,10 @@ public class ApiClient {
                                         // Ok and response
                                         case 200: {
 
-//                                            String identity = response.header("x-identity");
-//                                            if (JWTTokenHelper.hasJwtToken() && identity.length() == 0) {
-//                                                break;
-//                                            }
+                                            String identity = response.header("x-identity");
+                                            if (JWTTokenHelper.hasJwtToken() && identity.length() == 0) {
+                                                break;
+                                            }
                                         }
                                     }
 
@@ -88,7 +88,7 @@ public class ApiClient {
 
                                 }
                             })
-//                    .cookieJar(cookieJar)
+                    .cookieJar(cookieJar)
                     .build();
 
             retrofit = new Retrofit.Builder().baseUrl("https://nc.carrene.com/")
