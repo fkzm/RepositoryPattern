@@ -2,12 +2,9 @@ package nuesoft.repositorysample.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 import nuesoft.repositorysample.model.base.BaseModel;
 import nuesoft.repositorysample.model.base.Metadata;
 import nuesoft.repositorysample.repository.ResponseCallBack;
-import nuesoft.repositorysample.repository.RestAdapter;
 import nuesoft.repositorysample.store.Store;
 
 /**
@@ -79,6 +76,12 @@ public class Code extends BaseModel {
 
         Store.getInstance().getCurrentAdapter().getAll(responseCallBack);
     }
+
+    public static void getOne(int id, ResponseCallBack responseCallBack) {
+
+        Store.getInstance().getCurrentAdapter().getOne(id, responseCallBack);
+    }
+
 
     @Override
     public String getUrl() {

@@ -11,11 +11,13 @@ import nuesoft.repositorysample.repository.ResponseCallBack;
 public abstract class IAdapter implements BaseCRUDProvider {
 
 
-//    @Override
-//    <T extends BaseModel> void save(T model, ResponseCallBack responseCallBack);
-
-    //    //static method
+    // static method
     public <T extends BaseModel> void getAll(ResponseCallBack responseCallBack) {
+
+    }
+
+    // static method
+    public <T extends BaseModel> void getOne(int id, ResponseCallBack responseCallBack) {
 
     }
 

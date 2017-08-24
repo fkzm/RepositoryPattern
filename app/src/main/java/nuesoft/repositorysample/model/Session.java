@@ -43,8 +43,8 @@ public class Session extends BaseModel {
 
     @Override
     public Metadata getMetadata() {
-        Metadata metadata;
 
+        Metadata metadata;
         List<MyField> myFieldList = new ArrayList<>();
 
         for (Field field : this.getClass().getDeclaredFields()) {

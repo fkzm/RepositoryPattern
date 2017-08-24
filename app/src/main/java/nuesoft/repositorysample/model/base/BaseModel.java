@@ -24,11 +24,6 @@ public abstract class BaseModel implements BaseCRUDProvider {
 
     public abstract Metadata getMetadata();
 
-//    public static <T extends BaseModel> T newInstance() {
-//
-//    }
-
-
     public void setAdapter(IAdapter adapter) {
         this.adapter = adapter;
         Store.getInstance().setAdapter(adapter);
