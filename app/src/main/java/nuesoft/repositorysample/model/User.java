@@ -21,10 +21,7 @@ public class User extends BaseModel {
     private String password;
 
 
-    @Override
-    public String getUrl() {
-        return "apiv1/sessions";
-    }
+
 
     @Override
     public String getTableName() {
@@ -52,13 +49,13 @@ public class User extends BaseModel {
 
 
     public User(String email, String password) {
-        super(Store.getInstance().getCurrentAdapter());
+        super(Store.getInstance().getCurrentAdapter(), "test");
         this.email = email;
         this.password = password;
     }
 
     public User(IAdapter iAdapter, String email, String password) {
-        super(iAdapter);
+        super(iAdapter,"test");
         this.email = email;
         this.password = password;
     }

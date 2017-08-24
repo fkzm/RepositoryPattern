@@ -15,38 +15,38 @@ public class UserTest {
     @Test
     public void saveUser() {
 
-        User user = new User("hamed@carrene.com", "123456");
-
-        user.save(new ResponseCallBack() {
-            @Override
-            public void onResponse(ResponseResult responseResult) {
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
+//        User user = new User("hamed@carrene.com", "123456");
+//
+//        user.save(new ResponseCallBack() {
+//            @Override
+//            public void onResponse(ResponseResult responseResult) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//
+//            }
+//        });
 
     }
 
 
     public void saveUserWithAdapter() {
 
-        User user = new User(Store.getInstance().getAdapter("rest"), "Ehsan", "1458");
-
-        user.save(new ResponseCallBack() {
-            @Override
-            public void onResponse(ResponseResult responseResult) {
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
+//        User user = new User(Store.getInstance().getAdapter("rest"), "Ehsan", "1458");
+//
+//        user.save(new ResponseCallBack() {
+//            @Override
+//            public void onResponse(ResponseResult responseResult) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//
+//            }
+//        });
     }
 
 }

@@ -18,7 +18,13 @@ import nuesoft.repositorysample.store.Store;
 
 public abstract class BaseModel implements BaseCRUDProvider {
 
-    public abstract String getUrl();
+    static String url;
+
+//    public abstract String getUrl();
+
+    public static String getUrl1() {
+        return url;
+    }
 
     public abstract String getTableName();
 
@@ -35,8 +41,9 @@ public abstract class BaseModel implements BaseCRUDProvider {
 
     }
 
-    public BaseModel(IAdapter iAdapter) {
+    public BaseModel(IAdapter iAdapter, String url1) {
         this.adapter = iAdapter;
+        url = url1;
     }
 
     public IAdapter getAdapter() {

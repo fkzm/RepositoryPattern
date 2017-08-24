@@ -1,6 +1,7 @@
 package nuesoft.repositorysample.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.internal.Streams;
 
 import nuesoft.repositorysample.model.base.BaseModel;
 import nuesoft.repositorysample.model.base.Metadata;
@@ -69,7 +70,7 @@ public class Code extends BaseModel {
 
 
     public Code() {
-        super(Store.getInstance().getCurrentAdapter());
+        super(Store.getInstance().getCurrentAdapter(), "apiv1/codes?code=%~8064");
     }
 
     public static void getAll(ResponseCallBack responseCallBack) {
@@ -82,11 +83,6 @@ public class Code extends BaseModel {
         Store.getInstance().getCurrentAdapter().getOne(id, responseCallBack);
     }
 
-
-    @Override
-    public String getUrl() {
-        return "apiv1/codes?code=%~8064";
-    }
 
     @Override
     public String getTableName() {

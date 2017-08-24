@@ -35,7 +35,7 @@ public class RestAdapter extends IAdapter {
 
         Map<String, String> headerMap = new HashMap<>();
 
-        apiInterface.createBaseModel(model.getUrl(), map, headerMap).enqueue(new Callback<ResponseBody>() {
+        apiInterface.createBaseModel(T.getUrl1(), map, headerMap).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
@@ -79,7 +79,7 @@ public class RestAdapter extends IAdapter {
 
         Map<String, String> headerMap = new HashMap<>();
         //T type
-
+        String string = T.getUrl1();
         apiInterface.getBaseModel("apiv1/codes/"+id, headerMap, headerMap).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

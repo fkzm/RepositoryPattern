@@ -31,10 +31,6 @@ public class Session extends BaseModel {
         return password;
     }
 
-    @Override
-    public String getUrl() {
-        return "apiv1/sessions";
-    }
 
     @Override
     public String getTableName() {

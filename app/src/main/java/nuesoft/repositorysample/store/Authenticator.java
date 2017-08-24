@@ -3,25 +3,23 @@ package nuesoft.repositorysample.store;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import nuesoft.repositorysample.webService.MyRequest;
 import nuesoft.repositorysample.webService.Response;
+import okhttp3.Headers;
 
 public class Authenticator {
 
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences.Editor sharedPreferencesEditor;
-    private static Authenticator jWTTokenHelper = null;
-//    private static String tokenSharedPreferencesKey;
-
     private String tokenRequestHeaderKey = "Authorization";
     private String tokenLocalStorageKey = "token";
     private String tokenResponseHeaderKey = "X-New-JWT-Token";
     private boolean isAuthenticated;
     private String token;
 
+    public Authenticator() {
+
+    }
 
     public Authenticator(String tokenRequestHeaderKey, String tokenLocalStorageKey, String tokenResponseHeaderKey, Context context) {
 
@@ -60,16 +58,17 @@ public class Authenticator {
     }
 
     public void addAuthenticationHeader(MyRequest myRequest) {
+
         if (!this.isAuthenticated) {
 
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put(this.tokenRequestHeaderKey, "Bearer " + this.token);
-        myRequest.setHeader(map);
+        Headers.Builder headers = new Headers.Builder();
+        headers.add("Bearer " + this.token);
+        myRequest.setHeader(headers.build());
     }
 
     public void removeAuthenticationHeaders(MyRequest myRequest) {
-        myRequest.headers.remove(this.tokenRequestHeaderKey);
+        myRequest.headers.newBuilder().removeAll(this.tokenRequestHeaderKey).build();
     }
 
     public void checkResponse(Response response) {

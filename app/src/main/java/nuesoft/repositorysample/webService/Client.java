@@ -1,9 +1,10 @@
-package nuesoft.repositorysample.model;
+package nuesoft.repositorysample.webService;
 
 import java.util.Map;
 
 import nuesoft.repositorysample.store.Authenticator;
 import nuesoft.repositorysample.webService.MyRequest;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by mysterious on 8/24/17.
@@ -13,13 +14,24 @@ public class Client {
 
     private String baseUrl;
     private String tokenLocalStorageKey;
-    public Authenticator authenticator;
 
-    public Client(String baseUrl, String tokenLocalStorageKey, Authenticator authenticator) {
+    public static Authenticator authenticator;
+
+    private OkHttpClient okHttpClient;
+
+
+    public Client(String baseUrl, String tokenLocalStorageKey, Authenticator authenticator1) {
         this.baseUrl = baseUrl;
         this.tokenLocalStorageKey = tokenLocalStorageKey;
-        this.authenticator = authenticator;
+        authenticator = authenticator1;
 
+    }
+
+    public Authenticator getAuthenticator() {
+        if (authenticator == null) {
+            authenticator = new Authenticator();
+        }
+        return authenticator;
     }
 
     public void login(Map<String, Object> credentials) {
@@ -27,7 +39,7 @@ public class Client {
     }
 
     public void logout() {
-        this.authenticator.deleteJwtToken();
+        authenticator.deleteJwtToken();
 
     }
 

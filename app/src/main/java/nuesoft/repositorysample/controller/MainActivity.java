@@ -22,11 +22,11 @@ public class MainActivity extends AppCompatActivity {
 
         User user = new User("hamed@carrene.com", "123456");
 
-        user.login("hamed@carrene.com", "123456", new ResponseCallBack() {
-            @Override
-            public void onResponse(Response response) {
-
-                String token = (String) response.getField("token");
+//        user.login("hamed@carrene.com", "123456", new ResponseCallBack() {
+//            @Override
+//            public void onResponse(Response response) {
+//
+//                String token = (String) response.getField("token");
 //                Authenticator.setJwtToken(token);
 
 //                Code.getAll(new ResponseCallBack() {
@@ -42,19 +42,32 @@ public class MainActivity extends AppCompatActivity {
 //
 //                    }
 //                });
+//
+//                Code.getOne(1, new ResponseCallBack() {
+//                    @Override
+//                    public void onResponse(Response response) {
+//                        Code code = response.getObject();
+//                        Log.d("", "");
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Throwable t) {
+//
+//                    }
+//                });
+//            }
 
-                Code.getOne(1, new ResponseCallBack() {
-                    @Override
-                    public void onResponse(Response response) {
-                        Code code = response.getObject();
-                        Log.d("", "");
-                    }
+//            @Override
+//            public void onFailure(Throwable t) {
+//
+//            }
+//        });
 
-                    @Override
-                    public void onFailure(Throwable t) {
-
-                    }
-                });
+        Code.getOne(1, new ResponseCallBack() {
+            @Override
+            public void onResponse(Response response) {
+                Code code = response.getObject();
+                Log.d("", "");
             }
 
             @Override
