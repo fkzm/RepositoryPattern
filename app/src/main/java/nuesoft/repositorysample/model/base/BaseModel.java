@@ -1,10 +1,12 @@
 package nuesoft.repositorysample.model.base;
 
-import android.os.Bundle;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import nuesoft.repositorysample.repository.ResponseCallBack;
@@ -18,13 +20,7 @@ import nuesoft.repositorysample.store.Store;
 
 public abstract class BaseModel implements BaseCRUDProvider {
 
-    static String url;
-
-//    public abstract String getUrl();
-
-    public static String getUrl1() {
-        return url;
-    }
+    public static String url;
 
     public abstract String getTableName();
 
@@ -41,9 +37,8 @@ public abstract class BaseModel implements BaseCRUDProvider {
 
     }
 
-    public BaseModel(IAdapter iAdapter, String url1) {
+    public BaseModel(IAdapter iAdapter) {
         this.adapter = iAdapter;
-        url = url1;
     }
 
     public IAdapter getAdapter() {
@@ -59,18 +54,23 @@ public abstract class BaseModel implements BaseCRUDProvider {
 //        Store.getInstance().getCurrentAdapter().getAll(responseCallBack);
     }
 
+    public static <T extends BaseModel> T getObject(String body, Type type) {
+        Gson gson = new Gson();
+        T t = gson.fromJson(body, type);
+        return t;
+    }
+
     public HashMap<String, String> toHashMap() {
 
         HashMap<String, String> hashMap = new HashMap<>();
 
         for (MyField myField : this.getMetadata().getMyFields()) {
-
             String methodName = "get" + Character.toUpperCase(myField.getName().charAt(0)) + myField.getName().substring(1);
+
             try {
                 Method method = this.getClass().getMethod(methodName);
                 Object object = method.invoke(this);
                 String value = object.toString();
-                Log.d("name", "" + object.toString());
                 hashMap.put(myField.getName(), value);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();

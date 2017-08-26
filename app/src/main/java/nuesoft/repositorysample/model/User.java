@@ -49,13 +49,13 @@ public class User extends BaseModel {
 
 
     public User(String email, String password) {
-        super(Store.getInstance().getCurrentAdapter(), "test");
+        super(Store.getInstance().getCurrentAdapter());
         this.email = email;
         this.password = password;
     }
 
     public User(IAdapter iAdapter, String email, String password) {
-        super(iAdapter,"test");
+        super(iAdapter);
         this.email = email;
         this.password = password;
     }

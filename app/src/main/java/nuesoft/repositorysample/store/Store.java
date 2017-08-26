@@ -25,11 +25,11 @@ public class Store {
     }
 
     public static Store getInstance() {
-
         if (store == null) {
             store = new Store();
             Map<String, IAdapter> adapterMap = new HashMap<>();
-            adapterMap.put("REST", new RestAdapter(MyApp.getInstance()));
+            adapterMap.put("REST", new RestAdapter("https://nc.carrene.com/apiv1/", "token", Authenticator.getAuthenticator()
+            ));
             registerAdapters(adapterMap);
         }
         return store;

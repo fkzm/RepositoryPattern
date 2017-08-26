@@ -18,8 +18,7 @@ public class ApiClient {
         if (okHttpClient == null) {
 
             ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
-            final OkHttpClient okClient = new OkHttpClient.Builder().cookieJar(cookieJar).build();
-            return okHttpClient;
+            okHttpClient = new OkHttpClient.Builder().cookieJar(cookieJar).build();
         }
 
         return okHttpClient;

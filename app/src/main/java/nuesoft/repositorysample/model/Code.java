@@ -26,6 +26,9 @@ public class Code extends BaseModel {
     String description;
     String builtin;
 
+    static {
+        BaseModel.url = "apiv1/codes";
+    }
 
     public int getId() {
         return id;
@@ -69,8 +72,12 @@ public class Code extends BaseModel {
     }
 
 
+    public <T extends BaseModel> void save(ResponseCallBack responseCallBack) {
+        super.save(this, responseCallBack);
+    }
+
     public Code() {
-        super(Store.getInstance().getCurrentAdapter(), "apiv1/codes?code=%~8064");
+        super(Store.getInstance().getCurrentAdapter());
     }
 
     public static void getAll(ResponseCallBack responseCallBack) {

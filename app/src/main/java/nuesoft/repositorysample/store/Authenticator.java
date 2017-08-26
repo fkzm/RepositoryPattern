@@ -16,9 +16,18 @@ public class Authenticator {
     private String tokenResponseHeaderKey = "X-New-JWT-Token";
     private boolean isAuthenticated;
     private String token;
+    private static Authenticator authenticator;
 
     public Authenticator() {
 
+    }
+
+    public static Authenticator getAuthenticator() {
+        if (authenticator == null) {
+            return new Authenticator();
+        }
+
+        return authenticator;
     }
 
     public Authenticator(String tokenRequestHeaderKey, String tokenLocalStorageKey, String tokenResponseHeaderKey, Context context) {

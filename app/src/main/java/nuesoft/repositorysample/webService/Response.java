@@ -16,7 +16,6 @@ import java.util.List;
 
 import nuesoft.repositorysample.model.base.BaseModel;
 import okhttp3.Headers;
-import okhttp3.ResponseBody;
 
 /**
  * Created by mysterious on 8/23/17.
@@ -24,13 +23,28 @@ import okhttp3.ResponseBody;
 
 public class Response {
 
-    private retrofit2.Response<ResponseBody> responseBody;
+    private okhttp3.Response responseBody;
     private String body;
     private Type type;
     public Headers headers;
+    IOException ioException;
+
+    public Response(okhttp3.Response responseBody) {
+        this.responseBody = responseBody;
+        this.headers = responseBody.headers();
+        try {
+            this.body = this.responseBody.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Response(IOException ioException) {
+        this.ioException = ioException;
+    }
 
 
-    public Response(retrofit2.Response<ResponseBody> responseBody, Type type) {
+    public Response(okhttp3.Response responseBody, Type type) {
         this.responseBody = responseBody;
         this.headers = responseBody.headers();
         this.type = type;
@@ -42,6 +56,7 @@ public class Response {
     }
 
     public int getStatus() {
+
         return this.responseBody.code();
     }
 
@@ -61,11 +76,7 @@ public class Response {
         return this.body;
     }
 
-    public <T extends BaseModel> T getObject() {
-        Gson gson = new Gson();
-        T t = gson.fromJson(this.getBody(), this.type);
-        return t;
-    }
+
 
     public String getField(String name) {
 
