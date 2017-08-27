@@ -11,3 +11,4 @@ public class NoRestStore extends StoreException {
         super(message);
     }
 }
+

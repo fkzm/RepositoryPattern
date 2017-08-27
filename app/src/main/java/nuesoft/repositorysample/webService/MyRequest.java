@@ -1,5 +1,7 @@
 package nuesoft.repositorysample.webService;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 import org.jdeferred.Deferred;
@@ -12,6 +14,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import nuesoft.repositorysample.exception.AuthenticationRequiredError;
 import nuesoft.repositorysample.repository.Processor;
 import nuesoft.repositorysample.repository.RestAdapter;
 import okhttp3.Call;
@@ -29,21 +32,17 @@ import okhttp3.RequestBody;
 
 public class MyRequest {
 
-    String verb = "get";
-    String encoding;
     String resource = "session";
-    Map<String, Object> payload;
-    Map<String, String> queryString;
     RestAdapter restAdapter;
+    String verb = "get";
+    Map<String, Object> payload;
     public Headers headers;
-    Response response1;
+    Map<String, String> queryString;
+    String encoding = "json";
 
-    private String baseUrl;
-    private String tokenLocalStorageKey;
-    public static nuesoft.repositorysample.store.Authenticator authenticator;
-    private Processor processor;
+    Processor processor;
 
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     public MyRequest(RestAdapter restAdapter, String resource, String verb, Map<String, Object> payload, Map<String, String> queryString, String encoding) {
         this.restAdapter = restAdapter;
@@ -60,8 +59,9 @@ public class MyRequest {
         this.verb = verb;
     }
 
-    public void addQueryString(String key, String value, boolean allowDuplicate) {
+    public MyRequest addQueryString(String key, String value, boolean allowDuplicate) {
         this.queryString.put(key, value);
+        return this;
     }
 
     public MyRequest setVerb(String verb) {
@@ -110,11 +110,24 @@ public class MyRequest {
         return null;
     }
 
-    public MyRequest addAuthenticationHeaders(boolean force) {
+    public MyRequest addAuthenticationHeaders(boolean force) throws AuthenticationRequiredError {
         if (this.restAdapter.getAuthenticator().isAuthenticated()) {
             this.restAdapter.getAuthenticator().addAuthenticationHeader(this);
         } else if (force) {
-//            throw new AuthenticationRequiredError()
+            throw new AuthenticationRequiredError();
+        }
+        return this;
+    }
+
+    public MyRequest filter(String field, Object expression) {
+
+        this.addQueryString(field, expression.toString(), true);
+        return this;
+    }
+
+    public MyRequest filter(HashMap<String, Object> filters) {
+        for (Map.Entry<String, Object> entry : filters.entrySet()) {
+            this.addQueryString(entry.getKey(), entry.getValue().toString(), true);
         }
         return this;
     }
@@ -141,12 +154,9 @@ public class MyRequest {
         return this;
     }
 
-    public Promise send() {
+    public Deferred send() {
 
         final Deferred<Response, Response, Response> deferred = new DeferredObject<Response, Response, Response>();
-
-        Promise promise = deferred.promise();
-
 
         OkHttpClient client = new OkHttpClient();
 
@@ -160,7 +170,6 @@ public class MyRequest {
 
         String url = getUrl();
 
-
         requestBuilder.method(this.verb.toUpperCase(), requestBody).url(url);
 
         client.newCall(requestBuilder.build()).enqueue(new Callback() {
@@ -169,6 +178,7 @@ public class MyRequest {
             public void onResponse(Call call, okhttp3.Response response) throws IOException {
                 Response response2 = new Response(response);
                 deferred.resolve(response2);
+                Log.d("", "");
 
             }
 
@@ -182,6 +192,6 @@ public class MyRequest {
 
         });
 
-        return promise;
+        return deferred;
     }
 }

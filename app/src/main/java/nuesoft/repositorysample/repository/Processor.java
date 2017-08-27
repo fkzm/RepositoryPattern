@@ -10,5 +10,6 @@ import nuesoft.repositorysample.webService.Response;
 
 
 public interface Processor {
+
     public void processor(Deferred deferred, Response response);
 }

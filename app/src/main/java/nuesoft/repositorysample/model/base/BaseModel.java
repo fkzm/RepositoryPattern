@@ -1,18 +1,18 @@
 package nuesoft.repositorysample.model.base;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import org.jdeferred.Deferred;
+
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
-import nuesoft.repositorysample.repository.ResponseCallBack;
+import nuesoft.repositorysample.exception.ModelStateError;
 import nuesoft.repositorysample.repository.base.BaseCRUDProvider;
 import nuesoft.repositorysample.repository.base.IAdapter;
 import nuesoft.repositorysample.store.Store;
+import nuesoft.repositorysample.webService.MyRequest;
 
 /**
  * Created by mysterious on 8/15/17.
@@ -25,6 +25,8 @@ public abstract class BaseModel implements BaseCRUDProvider {
     public abstract String getTableName();
 
     public abstract Metadata getMetadata();
+
+    public String status;
 
     public void setAdapter(IAdapter adapter) {
         this.adapter = adapter;
@@ -46,11 +48,12 @@ public abstract class BaseModel implements BaseCRUDProvider {
     }
 
     @Override
-    public <T extends BaseModel> void save(T model, ResponseCallBack responseCallBack) {
-        this.getAdapter().save(model, responseCallBack);
+    public <T extends BaseModel> Deferred save(T model) throws ModelStateError {
+
+        return this.getAdapter().save(model);
     }
 
-    public static <T extends BaseModel> void getOne(int id, ResponseCallBack responseCallBack) {
+    public static <T extends BaseModel> void getOne(int id) {
 //        Store.getInstance().getCurrentAdapter().getAll(responseCallBack);
     }
 
@@ -60,21 +63,25 @@ public abstract class BaseModel implements BaseCRUDProvider {
         return t;
     }
 
-    public HashMap<String, String> toHashMap() {
+    public HashMap<String, Object> toHashMap() {
 
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
 
         for (MyField myField : this.getMetadata().getMyFields()) {
-            String methodName = "get" + Character.toUpperCase(myField.getName().charAt(0)) + myField.getName().substring(1);
 
+//            String methodName = "get" + Character.toUpperCase(myField.getName().charAt(0)) + myField.getName().substring(1);
+//
+//            try {
+//                Method method = this.getClass().getMethod(methodName);
+//                Object object = method.invoke(this);
+//                String value = object.toString();
+            Field filed = null;
             try {
-                Method method = this.getClass().getMethod(methodName);
-                Object object = method.invoke(this);
-                String value = object.toString();
-                hashMap.put(myField.getName(), value);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
+                filed = this.getClass().getDeclaredField(myField.getName());
+                filed.setAccessible(true);
+                Object object = filed.get(this);
+                hashMap.put(myField.getName(), object);
+            } catch (NoSuchFieldException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

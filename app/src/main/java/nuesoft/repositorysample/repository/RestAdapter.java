@@ -1,10 +1,15 @@
 package nuesoft.repositorysample.repository;
 
 import org.jdeferred.Deferred;
+import org.jdeferred.DoneCallback;
+import org.jdeferred.FailCallback;
 import org.jdeferred.Promise;
 
 import java.util.Map;
 
+import nuesoft.repositorysample.exception.AlreadyAuthenticatedError;
+import nuesoft.repositorysample.exception.AuthenticationRequiredError;
+import nuesoft.repositorysample.exception.ModelStateError;
 import nuesoft.repositorysample.model.base.BaseModel;
 import nuesoft.repositorysample.repository.base.IAdapter;
 import nuesoft.repositorysample.store.Authenticator;
@@ -42,10 +47,37 @@ public class RestAdapter extends IAdapter {
         return authenticator;
     }
 
-    public Promise login(Map<String, Object> credentials) {
+    public Deferred login(Map<String, Object> credentials) throws AlreadyAuthenticatedError {
 
-        Promise promise = this.request("sessions", "post").addParameters(credentials).send();
-        return promise;
+        if (authenticator.isAuthenticated()) {
+            throw new AlreadyAuthenticatedError();
+        }
+
+        final Deferred deferred = this.request("sessions", "POST").addParameters(credentials).send();
+        deferred.then(new DoneCallback<Response>() {
+            @Override
+            public void onDone(Response response) {
+                String token = response.getField("token");
+                authenticator.setToken(token);
+                deferred.resolve(response);
+            }
+        }).fail(new FailCallback<Response>() {
+            @Override
+            public void onFail(Response result) {
+                deferred.reject(result);
+            }
+        });
+
+        return deferred;
+//        final Deferred deferred = this.request("sessions", "POST").addParameters(credentials).send().then(new DoneCallback<Response>() {
+//            @Override
+//            public void onDone(Response response) {
+//                String token = response.getField("token");
+//                authenticator.setToken(token);
+//                deferred.resolve(response);
+//            })
+//        });
+//        return promise;
     }
 
     public void logout() {
@@ -53,28 +85,82 @@ public class RestAdapter extends IAdapter {
     }
 
     public MyRequest request(String resources, String verb) {
-        return new MyRequest(this, resources, verb).addAuthenticationHeaders(false);
+        try {
+            return new MyRequest(this, resources, verb).addAuthenticationHeaders(false);
+        } catch (AuthenticationRequiredError authenticationRequiredError) {
+            authenticationRequiredError.printStackTrace();
+        }
+
+        return null;
     }
 
 
     @Override
-    public <T extends BaseModel> void save(final T model, ResponseCallBack responseCallBack) {
-//        return request()
-        Promise promise = this.request(model.url, "POST").setPostProcessor(new Processor() {
-            @Override
-            public void processor(Deferred deferred, Response response) {
-                deferred.resolve(BaseModel.getObject(response.getBody(), model.getClass()));
+    public <T extends BaseModel> Deferred save(final T model) throws ModelStateError {
+
+        String verb = "";
+        String resourceUrl = "";
+
+
+        switch (model.status) {
+
+            case "loaded": {
+                throw new ModelStateError("Object is not changed.");
             }
-        }).send();
+
+            case "deleted": {
+                throw new ModelStateError("Object is deleted.");
+            }
+
+            case "new": {
+                verb = "POST";
+                resourceUrl = model.url;
+                break;
+            }
+
+            default: {
+                verb = "PUT";
+
+            }
+
+        }
+
+        Deferred deferred = this.request(resourceUrl, verb).addParameters(model.toHashMap()).send();
+        return deferred;
+
+//        final Deferred deferred = this.request("sessions", "POST").addParameters(credentials).send();
+//        deferred.then(new DoneCallback<Response>() {
+//            @Override
+//            public void onDone(Response response) {
+//                String token = response.getField("token");
+//                authenticator.setToken(token);
+//                deferred.resolve(response);
+//            }
+//        }).fail(new FailCallback<Response>() {
+//            @Override
+//            public void onFail(Response result) {
+//                deferred.reject(result);
+//            }
+//        });
+//
+//        return this.request(resourceUrl, verb).addParameters(model.toHashMap());
+
+
+//        Promise promise = this.request(model.url, "POST").setPostProcessor(new Processor() {
+//            @Override
+//            public void processor(Deferred deferred, Response response) {
+//                deferred.resolve(BaseModel.getObject(response.getBody(), model.getClass()));
+//            }
+//        }).send();
     }
 
     @Override
-    public <T extends BaseModel> void getOne(int id, final ResponseCallBack responseCallBack) {
+    public <T extends BaseModel> void getOne(int id) {
 //        r.setPostProcessor(new ResponseCallBack()).send()
     }
 
     @Override
-    public <T extends BaseModel> void getAll(final ResponseCallBack responseCallBack) {
+    public <T extends BaseModel> void getAll() {
 //        responseCallBack.onResponse(new Response());
     }
 

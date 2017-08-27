@@ -1,5 +1,7 @@
 package nuesoft.repositorysample.repository;
 
+import org.jdeferred.Deferred;
+
 import java.util.List;
 
 /**
@@ -14,7 +16,6 @@ public class ResponseResult<T> {
     private String responseBody;
 
     public ResponseResult() {
-
     }
 
     public void setResponseBody(String responseBody) {

@@ -1,9 +1,10 @@
 package nuesoft.repositorysample.repository.base;
 
-import java.util.List;
+import org.jdeferred.Deferred;
 
+import nuesoft.repositorysample.exception.ModelStateError;
 import nuesoft.repositorysample.model.base.BaseModel;
-import nuesoft.repositorysample.repository.ResponseCallBack;
+import nuesoft.repositorysample.webService.MyRequest;
 
 /**
  * Created by mysterious on 8/20/17.
@@ -11,7 +12,7 @@ import nuesoft.repositorysample.repository.ResponseCallBack;
 
 public interface BaseCRUDProvider {
 
-    <T extends BaseModel> void save(T model, ResponseCallBack responseCallBack);
+    <T extends BaseModel> Deferred save(T model) throws ModelStateError;
 
     // public static <T extends BaseModel> void getOne(int id, ResponseCallBack responseCallBack)
 

@@ -1,12 +1,19 @@
 package nuesoft.repositorysample.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.internal.Streams;
 
+import org.jdeferred.Deferred;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+import nuesoft.repositorysample.exception.ModelStateError;
 import nuesoft.repositorysample.model.base.BaseModel;
 import nuesoft.repositorysample.model.base.Metadata;
-import nuesoft.repositorysample.repository.ResponseCallBack;
+import nuesoft.repositorysample.model.base.MyField;
 import nuesoft.repositorysample.store.Store;
+import nuesoft.repositorysample.webService.MyRequest;
 
 /**
  * Created by mysterious on 8/22/17.
@@ -72,22 +79,23 @@ public class Code extends BaseModel {
     }
 
 
-    public <T extends BaseModel> void save(ResponseCallBack responseCallBack) {
-        super.save(this, responseCallBack);
+    public <T extends BaseModel> Deferred save() throws ModelStateError {
+        return super.save(this);
     }
 
     public Code() {
         super(Store.getInstance().getCurrentAdapter());
+        super.status = "new";
     }
 
-    public static void getAll(ResponseCallBack responseCallBack) {
+    public static void getAll() {
 
-        Store.getInstance().getCurrentAdapter().getAll(responseCallBack);
+        Store.getInstance().getCurrentAdapter().getAll();
     }
 
-    public static void getOne(int id, ResponseCallBack responseCallBack) {
+    public static void getOne(int id) {
 
-        Store.getInstance().getCurrentAdapter().getOne(id, responseCallBack);
+        Store.getInstance().getCurrentAdapter().getOne(id);
     }
 
 
@@ -99,6 +107,15 @@ public class Code extends BaseModel {
     @Override
     public Metadata getMetadata() {
 
-        return null;
+        Metadata metadata;
+
+        List<MyField> myFieldList = new ArrayList<>();
+
+        for (Field field : this.getClass().getDeclaredFields()) {
+            String filedName = field.getName();
+            myFieldList.add(new MyField(filedName));
+        }
+        metadata = new Metadata("CODE", myFieldList);
+        return metadata;
     }
 }

@@ -4,10 +4,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import nuesoft.repositorysample.exception.ModelStateError;
 import nuesoft.repositorysample.model.base.BaseModel;
 import nuesoft.repositorysample.model.base.Metadata;
 import nuesoft.repositorysample.model.base.MyField;
-import nuesoft.repositorysample.repository.ResponseCallBack;
 import nuesoft.repositorysample.repository.base.IAdapter;
 import nuesoft.repositorysample.store.Store;
 
@@ -19,8 +19,6 @@ public class User extends BaseModel {
 
     private String email;
     private String password;
-
-
 
 
     @Override
@@ -43,8 +41,8 @@ public class User extends BaseModel {
         return metadata;
     }
 
-    public void save(ResponseCallBack responseCallBack) {
-        this.getAdapter().save(this, responseCallBack);
+    public void save() throws ModelStateError {
+        this.getAdapter().save(this);
     }
 
 
@@ -58,11 +56,6 @@ public class User extends BaseModel {
         super(iAdapter);
         this.email = email;
         this.password = password;
-    }
-
-    public void login(String email, String password, ResponseCallBack responseCallBack) {
-        Session session = new Session(email, password);
-        this.getAdapter().save(session, responseCallBack);
     }
 
     public String getEmail() {

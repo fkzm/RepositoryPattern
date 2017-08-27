@@ -3,6 +3,12 @@ package nuesoft.repositorysample.store;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Map;
+
+import mobile.utility.JwtTokenHelper;
+import nuesoft.repositorysample.MyApp;
+import nuesoft.repositorysample.exception.AuthenticationRequiredError;
+import nuesoft.repositorysample.model.Member;
 import nuesoft.repositorysample.webService.MyRequest;
 import nuesoft.repositorysample.webService.Response;
 import okhttp3.Headers;
@@ -11,12 +17,13 @@ public class Authenticator {
 
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences.Editor sharedPreferencesEditor;
-    private String tokenRequestHeaderKey = "Authorization";
-    private String tokenLocalStorageKey = "token";
-    private String tokenResponseHeaderKey = "X-New-JWT-Token";
+    private static String tokenRequestHeaderKey = "Authorization";
+    private static String tokenLocalStorageKey = "token";
+    private static String tokenResponseHeaderKey = "X-New-JWT-Token";
     private boolean isAuthenticated;
     private String token;
     private static Authenticator authenticator;
+    private Member member;
 
     public Authenticator() {
 
@@ -24,24 +31,34 @@ public class Authenticator {
 
     public static Authenticator getAuthenticator() {
         if (authenticator == null) {
-            return new Authenticator();
+            return new Authenticator(tokenRequestHeaderKey, tokenLocalStorageKey, tokenResponseHeaderKey, MyApp.getInstance());
         }
-
         return authenticator;
     }
 
-    public Authenticator(String tokenRequestHeaderKey, String tokenLocalStorageKey, String tokenResponseHeaderKey, Context context) {
+    public Authenticator(String tokenRequestHeaderKey1, String tokenLocalStorageKey1, String tokenResponseHeaderKey1, Context context) {
 
-        this.tokenLocalStorageKey = tokenRequestHeaderKey;
-        this.tokenLocalStorageKey = tokenLocalStorageKey;
-        this.tokenResponseHeaderKey = tokenResponseHeaderKey;
+        tokenRequestHeaderKey = tokenRequestHeaderKey1;
+        tokenLocalStorageKey = tokenLocalStorageKey1;
+        tokenResponseHeaderKey = tokenResponseHeaderKey1;
         sharedPreferences = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
         sharedPreferencesEditor = sharedPreferences.edit();
+        this.member = null;
     }
 
     public void setToken(String token) {
+        this.token = token;
         sharedPreferencesEditor.putString(tokenLocalStorageKey, token);
         sharedPreferencesEditor.apply();
+        createMember();
+
+    }
+
+    public void createMember() {
+        Map<String, Object> jwtTokenBody = JwtTokenHelper.getTokenBody(this.token);
+        String fullName = (String) jwtTokenBody.get("name");
+        int id = (int) jwtTokenBody.get("id");
+        this.member = new Member(id, fullName);
     }
 
     public boolean hasJwtToken() {
@@ -64,15 +81,17 @@ public class Authenticator {
 
         sharedPreferencesEditor.remove(tokenLocalStorageKey);
         sharedPreferencesEditor.apply();
+        this.member = null;
     }
 
-    public void addAuthenticationHeader(MyRequest myRequest) {
+    public void addAuthenticationHeader(MyRequest myRequest) throws AuthenticationRequiredError {
 
         if (!this.isAuthenticated) {
-
+            throw new AuthenticationRequiredError();
         }
+
         Headers.Builder headers = new Headers.Builder();
-        headers.add("Bearer " + this.token);
+        headers.add("Bearer " + getJwtToken());
         myRequest.setHeader(headers.build());
     }
 
@@ -89,7 +108,7 @@ public class Authenticator {
     }
 
     public boolean isAuthenticated() {
-        return false;
+        return this.member != null;
     }
 
 
