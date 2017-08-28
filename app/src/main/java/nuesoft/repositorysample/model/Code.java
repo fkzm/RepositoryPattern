@@ -88,9 +88,9 @@ public class Code extends BaseModel {
         super.status = "new";
     }
 
-    public static void getAll() {
+    public static Deferred getAll() {
 
-        Store.getInstance().getCurrentAdapter().getAll();
+        return Store.getInstance().getCurrentAdapter().getAll();
     }
 
     public static void getOne(int id) {

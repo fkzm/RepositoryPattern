@@ -32,7 +32,6 @@ public class CodeTest {
 
         code = new Code();
 
-
         try {
 
             code.save().then(new DoneCallback<Response>() {
@@ -49,15 +48,26 @@ public class CodeTest {
             modelStateError.printStackTrace();
         }
 
-
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
             Assert.assertEquals(status, 200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
 
+    }
+
+    @Test
+    public void getAll() {
+
+        Code.getAll().then(new DoneCallback<Response>() {
+            @Override
+            public void onDone(Response result) {
+
+                Log.d("", "" + result.getStatus());
+            }
+        });
     }
 
     @After

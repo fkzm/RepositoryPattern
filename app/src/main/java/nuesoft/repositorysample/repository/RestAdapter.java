@@ -3,7 +3,6 @@ package nuesoft.repositorysample.repository;
 import org.jdeferred.Deferred;
 import org.jdeferred.DoneCallback;
 import org.jdeferred.FailCallback;
-import org.jdeferred.Promise;
 
 import java.util.Map;
 
@@ -28,7 +27,6 @@ public class RestAdapter extends IAdapter {
 
     public RestAdapter() {
     }
-
 
     public RestAdapter(String baseUrl, String tokenLocalStorageKey, Authenticator authenticator1) {
         this.baseUrl = baseUrl;
@@ -57,8 +55,7 @@ public class RestAdapter extends IAdapter {
         deferred.then(new DoneCallback<Response>() {
             @Override
             public void onDone(Response response) {
-                String token = response.getField("token");
-                authenticator.setToken(token);
+                getAuthenticator().setToken(response.getField("token"));
                 deferred.resolve(response);
             }
         }).fail(new FailCallback<Response>() {
@@ -122,7 +119,6 @@ public class RestAdapter extends IAdapter {
                 verb = "PUT";
 
             }
-
         }
 
         Deferred deferred = this.request(resourceUrl, verb).addParameters(model.toHashMap()).send();
@@ -160,9 +156,21 @@ public class RestAdapter extends IAdapter {
     }
 
     @Override
-    public <T extends BaseModel> void getAll() {
-//        responseCallBack.onResponse(new Response());
+    public <T extends BaseModel> Deferred getAll() {
+        String verb = "GET";
+        String resourceUrl = T.url;
+
+        try {
+            final Deferred deferred = this.request(resourceUrl, verb).addAuthenticationHeaders(true).send();
+            return deferred;
+        } catch (AuthenticationRequiredError authenticationRequiredError) {
+            authenticationRequiredError.printStackTrace();
+        }
+
+        return null;
+
     }
+
 
     //
 //    @Override

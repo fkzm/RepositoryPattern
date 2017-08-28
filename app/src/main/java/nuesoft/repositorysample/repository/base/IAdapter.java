@@ -1,5 +1,7 @@
 package nuesoft.repositorysample.repository.base;
 
+import org.jdeferred.Deferred;
+
 import nuesoft.repositorysample.model.base.BaseModel;
 
 /**
@@ -11,8 +13,9 @@ public abstract class IAdapter implements BaseCRUDProvider {
 
 
     // static method
-    public <T extends BaseModel> void getAll() {
+    public <T extends BaseModel> Deferred getAll() {
 
+        return null;
     }
 
     // static method

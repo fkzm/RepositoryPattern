@@ -5,7 +5,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import org.jdeferred.Deferred;
-import org.jdeferred.Promise;
 import org.jdeferred.impl.DeferredObject;
 
 import java.io.IOException;

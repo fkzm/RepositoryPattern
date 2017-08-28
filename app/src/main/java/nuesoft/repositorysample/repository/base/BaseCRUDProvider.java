@@ -14,6 +14,7 @@ public interface BaseCRUDProvider {
 
     <T extends BaseModel> Deferred save(T model) throws ModelStateError;
 
+
     // public static <T extends BaseModel> void getOne(int id, ResponseCallBack responseCallBack)
 
 

@@ -50,7 +50,6 @@ public class AuthenticationTest {
                 authenticated = restAdapter.getAuthenticator().isAuthenticated();
             }
         });
-
         try {
             Thread.sleep(5000);
             Assert.assertNotNull(token);

@@ -75,6 +75,8 @@ public abstract class BaseModel implements BaseCRUDProvider {
 //                Method method = this.getClass().getMethod(methodName);
 //                Object object = method.invoke(this);
 //                String value = object.toString();
+
+
             Field filed = null;
             try {
                 filed = this.getClass().getDeclaredField(myField.getName());
