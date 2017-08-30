@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.HashMap;
+import java.util.concurrent.CountDownLatch;
 
 import nuesoft.repositorysample.exception.AlreadyAuthenticatedError;
 import nuesoft.repositorysample.repository.RestAdapter;
@@ -30,6 +31,8 @@ public class AuthenticationTest {
     @Test
     public void Authentication() {
 
+        final CountDownLatch signal = new CountDownLatch(2);
+
         restAdapter = new RestAdapter("https://nc.carrene.com/apiv1/", "token", Authenticator.getAuthenticator());
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("email", "hamed@carrene.com");
@@ -42,23 +45,22 @@ public class AuthenticationTest {
             alreadyAuthenticatedError.printStackTrace();
         }
 
-
         deferred.then(new DoneCallback<Response>() {
             @Override
             public void onDone(Response result) {
                 token = result.getField("token");
                 authenticated = restAdapter.getAuthenticator().isAuthenticated();
+                Assert.assertNotNull(token);
+                Assert.assertTrue(authenticated);
+                signal.countDown();
             }
         });
+
         try {
-            Thread.sleep(5000);
-            Assert.assertNotNull(token);
-            Assert.assertTrue(authenticated);
+            signal.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @After
