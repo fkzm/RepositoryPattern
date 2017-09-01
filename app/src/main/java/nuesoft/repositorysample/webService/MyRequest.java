@@ -83,6 +83,16 @@ public class MyRequest {
         return this;
     }
 
+    public MyRequest ifMatch(String eTag) {
+        this.headers = this.headers.newBuilder().add("If-Match", eTag).build();
+        return this;
+    }
+
+    public MyRequest ifNoneMatch(String eTag) {
+        this.headers = this.headers.newBuilder().add("If-None-Match", eTag).build();
+        return this;
+    }
+
     public MyRequest take(int take) {
         this.addQueryString("take", "" + take, false);
         return this;

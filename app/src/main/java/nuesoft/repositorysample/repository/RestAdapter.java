@@ -25,8 +25,19 @@ public class RestAdapter extends IAdapter {
     private String tokenLocalStorageKey;
     public static Authenticator authenticator;
 
-    public RestAdapter() {
-    }
+    /*
+   * +----------------+----------------+--------+--------+---------+
+   * | state / ACTION | CHANGE         | SAVE   | RELOAD | DELETE  |
+   * +----------------+----------------+--------+--------+---------+
+   * | new            | new            | loaded | error  | error   |
+   * +----------------+----------------+--------+--------+---------+
+   * | loaded         | dirty          | error  | loaded | deleted |
+   * +----------------+----------------+--------+--------+---------+
+   * | dirty          | dirty / loaded | loaded | loaded | deleted |
+   * +----------------+----------------+--------+--------+---------+
+   * | deleted        | error          | error  | error  | error   |
+   * +----------------+----------------+--------+--------+---------+
+   */
 
     public RestAdapter(String baseUrl, String tokenLocalStorageKey, Authenticator authenticator1) {
         this.baseUrl = baseUrl;
@@ -66,15 +77,6 @@ public class RestAdapter extends IAdapter {
         });
 
         return deferred;
-//        final Deferred deferred = this.request("sessions", "POST").addParameters(credentials).send().then(new DoneCallback<Response>() {
-//            @Override
-//            public void onDone(Response response) {
-//                String token = response.getField("token");
-//                authenticator.setToken(token);
-//                deferred.resolve(response);
-//            })
-//        });
-//        return promise;
     }
 
     public void logout() {
@@ -98,8 +100,7 @@ public class RestAdapter extends IAdapter {
         String verb = "";
         String resourceUrl = "";
 
-
-        switch (model.status) {
+        switch (model.getStatus()) {
 
             case "loaded": {
                 throw new ModelStateError("Object is not changed.");
@@ -111,43 +112,57 @@ public class RestAdapter extends IAdapter {
 
             case "new": {
                 verb = "POST";
-                resourceUrl = model.url;
+                resourceUrl = T.url;
                 break;
             }
 
             default: {
                 verb = "PUT";
-
+                resourceUrl = model.getResourcePath();
+                break;
             }
         }
 
-        Deferred deferred = this.request(resourceUrl, verb).addParameters(model.toHashMap()).send();
+        Deferred deferred = this.request(resourceUrl, verb).addParameters(model.toHashMap()).ifMatch(model.geteTag()).send();
         return deferred;
+    }
 
-//        final Deferred deferred = this.request("sessions", "POST").addParameters(credentials).send();
-//        deferred.then(new DoneCallback<Response>() {
-//            @Override
-//            public void onDone(Response response) {
-//                String token = response.getField("token");
-//                authenticator.setToken(token);
-//                deferred.resolve(response);
-//            }
-//        }).fail(new FailCallback<Response>() {
-//            @Override
-//            public void onFail(Response result) {
-//                deferred.reject(result);
-//            }
-//        });
-//
-//        return this.request(resourceUrl, verb).addParameters(model.toHashMap());
+    @Override
+    public <T extends BaseModel> Deferred delete(T model) throws ModelStateError {
 
+        switch (model.getStatus()) {
+            case "new": {
+                throw new ModelStateError("Cannot delete unsaved objects.");
+            }
 
-//        Promise promise = this.request(model.url, "POST").setPostProcessor(new Processor() {
-//            @Override
-//            public void processor(Deferred deferred, Response response) {
-//                deferred.resolve(BaseModel.getObject(response.getBody(), model.getClass()));
-//            }
-//        }).send();
+            case "deleted": {
+                throw new ModelStateError("Object is already deleted.");
+            }
+        }
+
+        return this.request(model.getResourcePath(), "DELETE").ifMatch(model.geteTag()).send();
+
+    }
+
+    @Override
+    public <T extends BaseModel> Deferred reload(T model) throws ModelStateError {
+        
+        switch (model.getStatus()) {
+            case "new": {
+                throw new ModelStateError("Save object before reload.");
+            }
+
+            case "deleted": {
+                throw new ModelStateError("Object is deleted");
+            }
+        }
+
+        return this.request(model.getResourcePath(), "GET").ifNoneMatch(model.geteTag()).send();
+    }
+
+    public <T extends BaseModel> void updateFromResponse(T model, Response response) {
+
+        model.updateProperties(response.getMap());
     }
 
     @Override
@@ -170,75 +185,6 @@ public class RestAdapter extends IAdapter {
         return null;
 
     }
-
-
-    //
-//    @Override
-//    public <T extends BaseModel> void save(final T model, final ResponseCallBack responseCallBack) {
-//        HashMap<String, String> map = model.toHashMap();
-//
-//        Map<String, String> headerMap = new HashMap<>();
-//
-//        apiInterface.createBaseModel(T.url, map, headerMap).enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//
-////                responseResult.setDescription(response.errorBody().toString());
-//                responseCallBack.onResponse(new nuesoft.repositorysample.webService.Response(response, model.getClass()));
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//
-//            }
-//        });
-//    }
-//
-//
-//    @Override
-//    public <T extends BaseModel> void getAll(final ResponseCallBack responseCallBack) {
-//
-//        Map<String, String> headerMap = new HashMap<>();
-//
-////        String url = T.newInstance().getUrl();
-////UL from T
-//
-//        apiInterface.getBaseModel(T.url, headerMap, null).enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                Log.d("", "");
-//                responseCallBack.onResponse(new nuesoft.repositorysample.webService.Response(response, Code.class));
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public <T extends BaseModel> void getOne(int id, final ResponseCallBack responseCallBack) {
-//
-//        Map<String, String> headerMap = new HashMap<>();
-//        //T type
-//        apiInterface.getBaseModel(T.url + id, headerMap, headerMap).enqueue(new Callback<ResponseBody>() {
-//
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                Log.d("", "");
-//                responseCallBack.onResponse(new nuesoft.repositorysample.webService.Response(response, Code.class));
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//
-//            }
-//        });
-//    }
-
-
 }
 
 

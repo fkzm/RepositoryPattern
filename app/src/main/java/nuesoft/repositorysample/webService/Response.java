@@ -1,5 +1,7 @@
 package nuesoft.repositorysample.webService;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -11,8 +13,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import nuesoft.repositorysample.model.base.BaseModel;
 import okhttp3.Headers;
@@ -77,7 +81,6 @@ public class Response {
     }
 
 
-
     public String getField(String name) {
 
         JSONObject jsonObj = null;
@@ -106,5 +109,22 @@ public class Response {
             modelList.add(code);
         }
         return modelList;
+    }
+
+    public HashMap<String, Object> getMap() {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+
+        try {
+            map = mapper.readValue(this.getBody(), new TypeReference<Map<String, String>>() {
+            });
+            return map;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

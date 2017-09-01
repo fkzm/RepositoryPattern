@@ -13,14 +13,12 @@ import nuesoft.repositorysample.model.base.BaseModel;
 import nuesoft.repositorysample.model.base.Metadata;
 import nuesoft.repositorysample.model.base.MyField;
 import nuesoft.repositorysample.store.Store;
-import nuesoft.repositorysample.webService.MyRequest;
 
 /**
  * Created by mysterious on 8/22/17.
  */
 
 public class Code extends BaseModel {
-
 
     boolean billable;
     @SerializedName("code")
@@ -78,14 +76,12 @@ public class Code extends BaseModel {
         this.code = code;
     }
 
+    public Code() {
+        super(Store.getInstance().getCurrentAdapter());
+    }
 
     public <T extends BaseModel> Deferred save() throws ModelStateError {
         return super.save(this);
-    }
-
-    public Code() {
-        super(Store.getInstance().getCurrentAdapter());
-        super.status = "new";
     }
 
     public static Deferred getAll() {
@@ -117,5 +113,15 @@ public class Code extends BaseModel {
         }
         metadata = new Metadata("CODE", myFieldList);
         return metadata;
+    }
+
+    @Override
+    public <T extends BaseModel> Deferred delete(T model) throws ModelStateError {
+        return super.delete(this);
+    }
+
+    @Override
+    public <T extends BaseModel> Deferred reload(T model) throws ModelStateError {
+        return null;
     }
 }

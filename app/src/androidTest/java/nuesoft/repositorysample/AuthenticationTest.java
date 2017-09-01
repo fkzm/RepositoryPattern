@@ -24,14 +24,13 @@ import nuesoft.repositorysample.webService.Response;
 @RunWith(AndroidJUnit4.class)
 public class AuthenticationTest {
 
-    RestAdapter restAdapter;
-    String token;
-    boolean authenticated;
+    private RestAdapter restAdapter;
+
 
     @Test
     public void Authentication() {
 
-        final CountDownLatch signal = new CountDownLatch(2);
+        final CountDownLatch signal = new CountDownLatch(1);
 
         restAdapter = new RestAdapter("https://nc.carrene.com/apiv1/", "token", Authenticator.getAuthenticator());
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -48,10 +47,10 @@ public class AuthenticationTest {
         deferred.then(new DoneCallback<Response>() {
             @Override
             public void onDone(Response result) {
-                token = result.getField("token");
-                authenticated = restAdapter.getAuthenticator().isAuthenticated();
+                String token = result.getField("token");
+                boolean isAuthenticated = restAdapter.getAuthenticator().isAuthenticated();
                 Assert.assertNotNull(token);
-                Assert.assertTrue(authenticated);
+                Assert.assertTrue(isAuthenticated);
                 signal.countDown();
             }
         });
