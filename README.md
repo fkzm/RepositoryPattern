@@ -6,13 +6,16 @@ Setting up development Environment on Linux
 ----------------------------------
 
 ### Installing JAVA
+```bash
 sudo add-apt-repository ppa:webupd8team/java
 
 sudo apt-get update
 
 sudo apt-get install oracle-java8-installer
+```
 
 ### Installing SDK
+```bash
 cd path/to/project
 
 mkdir -p "SDK_HOME/licenses"
@@ -22,25 +25,26 @@ echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "SDK_HOME/licenses/androi
 echo -e "sdk.dir=SDK_HOME" > "./local.properties"
 
 ./gradlew assembleDebug
-
+```
 ### Installing SDK Tools
-
+```bash
 wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
 
 sudo apt-get install unzip
 
 unzip sdk-tools-linux-3859397.zip -d SDK_HOME
+```
 
 ### Installing emulator image
-
+```bash
 emulator android 23 google api
 
 wget https://dl.google.com/android/repository/sys-img/google_apis/x86-23_r16.zip
 
 unzip x86-23_r16.zip -d SDK_HOME
-
+```
 ### Installing android emulator
-
+```bash
 wget https://dl.google.com/android/repository/emulator-linux-4266726.zip
 
 unzip emulator-linux-4266726.zip -d SDK_HOME
@@ -54,3 +58,4 @@ cd SDK_HOME/emulator
 cd path/to/project
 ./gradlew connectedAndroidTest
 
+```
